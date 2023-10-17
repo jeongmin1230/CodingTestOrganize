@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">CodingTestOrganize</string>
+    <string name="enter_day">day 를 입력 해 주세요. : </string>
+    <string name="enter_index">1~4중 문제 번호를 입력 해 주세요. : </string>
+    <string name="confirm">확정</string>
+    <string name="enter">입력</string>
+    <string name="enter_again">다시 입력</string>
+</resources>
