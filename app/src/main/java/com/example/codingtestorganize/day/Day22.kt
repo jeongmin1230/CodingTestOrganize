@@ -1,5 +1,6 @@
 package com.example.codingtestorganize.day
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -8,48 +9,50 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
 
 @Composable
-fun Day21(choose: String) {
+fun Day22(choose: String) {
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
         .fillMaxSize()) {
         when(choose) {
             "1" -> {
                 val result = remember { mutableStateOf(0) }
-                var myString by remember { mutableStateOf("") }
+                var n by remember { mutableStateOf("") }
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "문자열 myString 이 매개 변수로 주어 집니다. myString 은 소문자, 대문자, 자연수 로만 구성 되어 있습니다. myString 안의 자연수 들의 합을 return 하도록 solution 함수를 완성 해 주세요.")
+                    Text(text = "3x 마을 사람 들은 3을 저주의 숫자 라고 생각 하기 때문에 3의 배수와 숫자 3을 사용 하지 않습니다. 3x 마을 사람 들의 숫자는 다음과 같습니다. 정수 n이 매개 변수로 주어질 때, n을 3x 마을 에서 사용 하는 숫자로 바꿔 return 하도록 solution 함수를 완성 해 주세요.")
+                    Image(painter = painterResource(id = R.drawable.curse_number_3_explain), contentDescription = null)
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
-                        value = myString,
-                        onValueChange = { myString = it },
-                        label = { Text(text = "문자열 myString")},
+                        value = n,
+                        onValueChange = { n = it },
+                        label = { Text(text = "정수 n")},
                         modifier = Modifier.fillMaxWidth()
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) additionOfHiddenNumbers2(myString, result)
+                        if(show) curseNumber3(n, result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
                     if(show) {
-                        Text(text = "숨어 있는 숫자의 덧셈(2): ${result.value}")
+                        Text(text = "저주의 숫자 3 : ${result.value}")
                     }
                     LaunchedEffect(show) {
                         if(!show) {
-                            myString = ""
+                            n = ""
                             result.value = 0
                         }
                     }
                 }
             }
-            /* TODO - 안전 지대 다시 */
+            /* TODO - 평행 */
             "2" -> {
                 val result = remember { mutableStateOf(0) }
                 var dots by remember { mutableStateOf("") }
@@ -57,9 +60,9 @@ fun Day21(choose: String) {
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "다음 그림과 같이 지뢰가 있는 지역과 지뢰에 인접한 위, 아래, 좌, 우 대각선 칸을 모두 위험 지역 으로 분류 합니다. " +
-                            "지뢰는 2차원 배열 board 에 1로 표시 되어 있고 boar 에는 지뢰가 매설 된 지역 1과, 지뢰가 없는 지역 0만 존재 합니다." +
-                            "지뢰가 매설된 지역의 지도 board 가 매개 변수로 주어질 때, 안전한 지역의 칸 수를 return 하도록 solution 함수를 완성 해 주세요.")
+                    Text(text = "점 네 개의 좌표를 담은 이차원 배열  dots 가 다음과 같이 매개 변수로 주어 집니다.\n" +
+                            "[[x1, y1], [x2, y2], [x3, y3], [x4, y4]]\n" +
+                            "주어진 네 개의 점을 두 개씩 이었을 때, 두 직선이 평행이 되는 경우가 있으면 1을 없으면 0을 return 하도록 solution 함수를 완성 해 보세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = dots,
@@ -75,12 +78,12 @@ fun Day21(choose: String) {
                     }.toTypedArray()
                     Button(onClick = {
                         show = !show
-                        if(show) safeZone(final, result)
+                        if(show) parallel(final, result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
                     if(show) {
-                        Text(text = "안전 지대 : ${result.value}")
+                        Text(text = "평행 : ${result.value}")
                     }
                     LaunchedEffect(show) {
                         if(!show) {
@@ -90,15 +93,16 @@ fun Day21(choose: String) {
                     }
                 }
             }
+            /* TODO - 겹치는 선분의 길이 */
             "3" -> {
                 val result = remember { mutableStateOf(0) }
                 var sides by remember { mutableStateOf("") }
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "선분 세 개로 삼각형을 만들기 위해서는 다음과 같은 조건을 만족 해야 합니다. " +
-                            "가장 긴 변의 길이는 다른 두 변의 길이의 합보다 작아야 합니다." +
-                            "삼각형의 두 변의 길이가 담긴 배열 sides 이 매개 변수로 주어 집니다. 나머지 한 변이 될 수 있는 정수의 개수를 return 하도록 solution 함수를 완성 해 주세요.")
+                    Text(text = "선분 3개가 평행 하게 놓여 있습니다. " +
+                            "세 선분의 시작과 끝 좌표가 [[start, end], [start, end], [start, end]] 형태로 들어 있는 2차원 배열 lines 가 매개 변수로 주어질 때, " +
+                            "두 개 이상의 선분이 겹치는 부분의 길이를 return 하도록 solution 함수를 완성 해 보세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = sides,
@@ -111,11 +115,11 @@ fun Day21(choose: String) {
                     val sidesValueToArray = sidesValue.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) conditionsForCompletionOfATriangle(sidesValueToArray, result)
+                        if(show) lengthOfOverlappingLineSegments(sidesValueToArray, result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text("삼각형의 완성조건(2) : ${result.value}")
+                    if(show) Text("겹치는 선분의 길이 : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
                             sides = ""
@@ -125,42 +129,41 @@ fun Day21(choose: String) {
                 }
             }
             "4" -> {
-                val result = remember { mutableStateOf(0) }
-                var spell by remember { mutableStateOf("") }
-                var dic by remember { mutableStateOf("") }
+                val answer = remember { mutableStateOf(0) }
+                var a by remember { mutableStateOf("") }
+                var b by remember { mutableStateOf("") }
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "PROGRAMMERS-962 행성에 불시착 한 우주 비행사 머쓱이는 외계 행성의 언어를 공부 하려고 합니다. 알파벳이 담긴 배열 spell 과 외계어 사전 dic 이 매개 변수로 주어 집니다. spell 에 담긴 알파벳을 한 번씩만 모두 사용한 단어가 dic 에 존재 한다면 1, 존재 하지 않는 다면 2를 return 하도록 solution 함수를 완성 해 주세요.")
+                    Text(text = "소수점 아래 숫자가 계속 되지 않고 유한개 인 소수를 유한 소수 라고 합니다. 분수를 소수로 고칠 때 유한 소수로 나타낼 수 있는 분수 인지 판별 하려고 합니다. 유한 소수가 되기 위한 분수의 조건은 다음과 같습니다.\n" +
+                            "기약 분수로 나타 내었을 때, 분모의 소 인수가 2와 5만 존재 해야 합니다.\n" +
+                            "두 정수 a와 b가 매개 변수로 주어질 때, a/b가 유한 소수 이면 1을, 무한 소수 라면 2를 return 하도록 solution 함수를 완성 해 주세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
-                        value = spell,
-                        onValueChange = { spell = it },
-                        label = { Text(text = ", 기준 spell 배열 입력")},
+                        value = a,
+                        onValueChange = { a = it },
+                        label = { Text(text = "정수 a")},
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
-                        value = dic,
-                        onValueChange = { dic = it },
-                        label = { Text(text = ", 기준 dic 배열 입력")},
+                        value = b,
+                        onValueChange = { b = it },
+                        label = { Text(text = "정수 b")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    val spellValue = spell.split(",").map { it.trim() }.toMutableList()
-                    val dicValue = dic.split(",").map { it.trim() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) alienLanguageDictionary(spellValue, dicValue, result)
+                        if(show) answer.value = identifyingFiniteDecimals(a.toInt(), b.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text("외계어 사전 : ${result.value}")
+                    if(show) Text("유한 소수 판별 하기 : ${answer.value}")
                     LaunchedEffect(show) {
                         if(!show) {
-                            spell = ""
-                            dic = ""
-                            result.value = 0
+                            a = ""
+                            b = ""
+                            answer.value = 0
                         }
                     }
                 }
@@ -169,49 +172,45 @@ fun Day21(choose: String) {
     }
 }
 
-private fun additionOfHiddenNumbers2(myString: String, result: MutableState<Int>) {
-    val split = myString.split("[a-zA-z]+".toRegex()).toTypedArray()
-    for(i in split.indices) {
-        if(split[i].matches("[0-9]+".toRegex())) {
-            result.value += split[i].toInt()
+private fun curseNumber3(n: String, result: MutableState<Int>) {
+    var answer = n.toInt()
+    var i = 1
+    while(i <= answer) {
+        if((i % 3 == 0) || i.toString().contains("3")) {
+            answer++
         }
-    }
-    println("숨어 있는 숫자의 덧셈(2) : ${result.value}")
-}
-
-private fun safeZone(board: Array<IntArray>, result: MutableState<Int>) {
-    for(i in board) {
-        for(j in i) {
-            println("j : $j")
-        }
-    }
-    println("안전 지대 : ${result.value}")
-}
-
-private fun conditionsForCompletionOfATriangle(sides: MutableList<Int>, result: MutableState<Int>) {
-    val sortedSides = sides.sortedDescending()
-    val highLimit = sortedSides[0] + sortedSides[1]
-    val lowLimit = sortedSides[0] - sortedSides[1]
-    result.value = highLimit - lowLimit - 1
-    println("삼각형의 완성 조건(2) : ${result.value}")
-}
-
-
-private fun alienLanguageDictionary(spell: MutableList<String>, dic: MutableList<String>, result: MutableState<Int>) {
-    var answer = 2
-    for(i in dic) {
-        var right = true
-        for(j in spell) {
-            if(i.indexOf(j) == -1){
-                right = false
-                break
-            }
-        }
-        if(right) {
-            answer = 1
-            break
-        }
+        i++
     }
     result.value = answer
-    println("외계어 사전 : ${result.value}" )
+    println("저주의 숫자 3 : ${result.value}")
+}
+
+private fun parallel(board: Array<IntArray>, result: MutableState<Int>) {
+    println("평행 : ${result.value}")
+}
+
+private fun lengthOfOverlappingLineSegments(sides: MutableList<Int>, result: MutableState<Int>) {
+    println("겹치는 선분의 길이 : ${result.value}")
+}
+
+private fun gcd(a: Int, b: Int): Int{
+    return if(b==0) {
+        a
+    } else {
+        gcd(b, a % b)
+    }
+}
+
+private fun identifyingFiniteDecimals(a: Int, b: Int): Int {
+    var newB = b / gcd(a, b)
+    while (newB != 1) {
+        newB /= if (newB % 2 == 0) {
+            2
+        } else if (newB % 5 == 0) {
+            5
+        } else {
+            return 2
+        }
+    }
+    return 1
 }

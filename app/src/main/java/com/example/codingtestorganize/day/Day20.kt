@@ -19,6 +19,7 @@ fun Day20(choose: String) {
         .verticalScroll(rememberScrollState())
         .fillMaxSize()) {
         when(choose) {
+            /* TODO - 직사각형 넓이 구하기*/
             "1" -> {
                 val result = remember { mutableStateOf(0) }
                 var dots by remember { mutableStateOf("") }
