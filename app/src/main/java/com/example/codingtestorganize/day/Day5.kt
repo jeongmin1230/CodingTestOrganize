@@ -35,7 +35,7 @@ fun Day5(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) getADiscountAtAClothingStore(price, answer)
+                        if(show) answer.value = getADiscountAtAClothingStore(price.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -64,7 +64,7 @@ fun Day5(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) iceAmericano(money, resultArray)
+                        if(show) resultArray.addAll(iceAmericano(money.toInt()))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -93,7 +93,7 @@ fun Day5(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) ageOutput(age, answer)
+                        if(show) answer.value = ageOutput(age.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -124,7 +124,7 @@ fun Day5(choose: String) {
                     val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) flipArray(intValues, resultArray)
+                        if(show) resultArray.addAll(flipArray(intValues))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -143,31 +143,39 @@ fun Day5(choose: String) {
     }
 }
 
-private fun getADiscountAtAClothingStore(price: String, answer: MutableState<Int>) {
-    if(price.toInt() >= 500000) {
-        answer.value = (price.toInt() * 0.8).toInt()
-    } else if(price.toInt() >= 300000) {
-        answer.value = (price.toInt() * 0.9).toInt()
-    } else if(price.toInt() >= 100000) {
-        answer.value = (price.toInt() * 0.95).toInt()
+private fun getADiscountAtAClothingStore(price: Int): Int {
+    println("옷가게 할인 받기")
+    var answer = 0
+    answer = if(price >= 500000) {
+        (price * 0.8).toInt()
+    } else if(price >= 300000) {
+        (price * 0.9).toInt()
+    } else if(price >= 100000) {
+        (price * 0.95).toInt()
     } else {
-        answer.value = price.toInt()
+        price
     }
-    println("옷가게 할인 받기 : ${answer.value}")
+    return answer
 }
 
-private fun iceAmericano(money: String, resultArray: MutableList<Int>) {
-    resultArray.add(money.toInt()/5500)
-    resultArray.add(money.toInt() % 5500)
-    println("아이스 아메리카노 : $resultArray")
+private fun iceAmericano(money: Int): MutableList<Int> {
+    println("아이스 아메리카노")
+    val mutableList = mutableListOf<Int>()
+    mutableList.add(money/5500)
+    mutableList.add(money % 5500)
+    return mutableList
 }
 
-private fun ageOutput(age: String, answer: MutableState<Int>) {
-    answer.value = 2022 - (age.toInt()-1)
-    println("나이 출력 : ${answer.value}")
+private fun ageOutput(age: Int): Int {
+    println("나이 출력")
+    var answer = 0
+    answer = 2022 - (age-1)
+    return answer
 }
 
-private fun flipArray(numList: MutableList<Int>, resultArray: MutableList<Int>) {
-    resultArray.addAll(numList.reversed())
-    println("배열 뒤집기 : $resultArray")
+private fun flipArray(numList: MutableList<Int>): MutableList<Int> {
+    println("배열 뒤집기")
+    val mutableList = mutableListOf<Int>()
+    mutableList.addAll(numList.reversed())
+    return mutableList
 }

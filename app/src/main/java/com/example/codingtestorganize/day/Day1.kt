@@ -7,7 +7,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -20,7 +19,7 @@ fun Day1(choose: String) {
         .fillMaxSize()) {
         when(choose) {
             "1" -> {
-                val answer = remember { mutableStateOf(0) }
+                val result = remember { mutableStateOf(0) }
                 var show by remember { mutableStateOf(false) }
                 var num1 by remember { mutableStateOf("") }
                 var num2 by remember { mutableStateOf("") }
@@ -44,22 +43,22 @@ fun Day1(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) sumOfTwoNumbers(num1, num2, answer)
+                        if(show) result.value = sumOfTwoNumbers(num1.toInt(), num2.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text(text = "두 수의 합 : ${answer.value}")
+                    if(show) Text(text = "두 수의 합 : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
                             num1 = ""
                             num2 = ""
-                            answer.value = 0
+                            result.value = 0
                         }
                     }
                 }
             }
             "2" -> {
-                val answer = remember { mutableStateOf(0) }
+                val result = remember { mutableStateOf(0) }
                 var show by remember { mutableStateOf(false) }
                 var num1 by remember { mutableStateOf("") }
                 var num2 by remember { mutableStateOf("") }
@@ -83,22 +82,22 @@ fun Day1(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) differenceBetweenTwoNumbers(num1, num2, answer)
+                        if(show) result.value = differenceBetweenTwoNumbers(num1.toInt(), num2.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text(text = "두 수의 차 : ${answer.value}")
+                    if(show) Text(text = "두 수의 차 : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
                             num1 = ""
                             num2 = ""
-                            answer.value = 0
+                            result.value = 0
                         }
                     }
                 }
             }
             "3" -> {
-                val answer = remember { mutableStateOf(0) }
+                val result = remember { mutableStateOf(0) }
                 var show by remember { mutableStateOf(false) }
                 var num1 by remember { mutableStateOf("") }
                 var num2 by remember { mutableStateOf("") }
@@ -122,22 +121,22 @@ fun Day1(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) productOfTwoNumbers(num1, num2, answer)
+                        if(show) result.value = productOfTwoNumbers(num1.toInt(), num2.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text(text = "두 수의 곱 : ${answer.value}")
+                    if(show) Text(text = "두 수의 곱 : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
                             num1 = ""
                             num2 = ""
-                            answer.value = 0
+                            result.value = 0
                         }
                     }
                 }
             }
             "4" -> {
-                val answer = remember { mutableStateOf(0) }
+                val result = remember { mutableStateOf(0) }
                 var show by remember { mutableStateOf(false) }
                 var num1 by remember { mutableStateOf("") }
                 var num2 by remember { mutableStateOf("") }
@@ -160,16 +159,16 @@ fun Day1(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) findTheQuotient(num1, num2, answer)
+                        if(show) result.value = findTheQuotient(num1.toInt(), num2.toInt(),)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text(text = "몫 구하기 : ${answer.value}")
+                    if(show) Text(text = "몫 구하기 : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
                             num1 = ""
                             num2 = ""
-                            answer.value = 0
+                            result.value = 0
                         }
                     }
                 }
@@ -178,30 +177,30 @@ fun Day1(choose: String) {
     }
 }
 
-private fun sumOfTwoNumbers(num1: String, num2: String, answer: MutableState<Int>) {
-    if(num1.isNotEmpty() && num2.isNotEmpty()) {
-        answer.value = num1.toInt() + num2.toInt()
-        println("두 수의 합 : ${num1.toInt()+num2.toInt()}")
-    }
+private fun sumOfTwoNumbers(num1: Int, num2: Int): Int {
+    println("두 수의 합")
+    var answer = 0
+    answer = num1 + num2
+    return answer
 }
 
-private fun differenceBetweenTwoNumbers(num1: String, num2: String, answer: MutableState<Int>) {
-    if(num1.isNotEmpty() && num2.isNotEmpty()) {
-        answer.value = num1.toInt() - num2.toInt()
-        println("두 수의 차 : ${num1.toInt()-num2.toInt()}")
-    }
+private fun differenceBetweenTwoNumbers(num1: Int, num2: Int): Int {
+    println("두 수의 차")
+    var answer = 0
+    answer = num1 - num2
+    return answer
 }
 
-private fun productOfTwoNumbers(num1: String, num2: String, answer: MutableState<Int>) {
-    if(num1.isNotEmpty() && num2.isNotEmpty()) {
-        answer.value = num1.toInt() * num2.toInt()
-        println("두 수의 곱 : ${num1.toInt()*num2.toInt()}")
-    }
+private fun productOfTwoNumbers(num1: Int, num2: Int): Int {
+    println("두 수의 곱")
+    var answer = 0
+    answer = num1 * num2
+    return answer
 }
 
-private fun findTheQuotient(num1: String, num2: String, answer: MutableState<Int>) {
-    if(num1.isNotEmpty() && num2.isNotEmpty()) {
-        answer.value = num1.toInt()/num2.toInt()
-        println("몫 구하기 : ${num1.toInt()/num2.toInt()}")
-    }
+private fun findTheQuotient(num1: Int, num2: Int): Int {
+    println("몫 구하기")
+    var answer = 0
+    answer = num1/num2
+    return answer
 }

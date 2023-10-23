@@ -7,7 +7,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -42,7 +41,7 @@ fun Day3(choose: String) {
                 )
                 Button(onClick = {
                     show = !show
-                    if(show) findTheRemainder(num1, num2, answer)
+                    if(show) answer.value = findTheRemainder(num1.toInt(), num2.toInt())
                 }) {
                     Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                 }
@@ -56,7 +55,7 @@ fun Day3(choose: String) {
                 }
             }
             "2" -> {
-                val answer = remember { mutableStateOf(0) }
+                val result = remember { mutableStateOf(0) }
                 var show by remember { mutableStateOf(false) }
                 var inputText by remember { mutableStateOf("") }
                 Column {
@@ -73,22 +72,22 @@ fun Day3(choose: String) {
                     val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) findTheMedian(intValues, answer)
+                        if(show) result.value = findTheMedian(intValues)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text(text = "중앙값 구하기 : ${answer.value}")
+                    if(show) Text(text = "중앙값 구하기 : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
                             inputText = ""
                             intValues.clear()
-                            answer.value = 0
+                            result.value = 0
                         }
                     }
                 }
             }
             "3" -> {
-                val answer = remember { mutableStateOf(0) }
+                val result = remember { mutableStateOf(0) }
                 var show by remember { mutableStateOf(false) }
                 var inputText by remember { mutableStateOf("") }
                 Column {
@@ -105,24 +104,24 @@ fun Day3(choose: String) {
                     val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) findTheMode(intValues, answer)
+                        if(show) result.value = findTheMode(intValues)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text(text = "최빈값 구하기 : ${answer.value}")
+                    if(show) Text(text = "최빈값 구하기 : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
                             inputText = ""
                             intValues.clear()
-                            answer.value = 0
+                            result.value = 0
                         }
                     }
                 }
             }
             "4" -> {
+                val hateEvenNumbers = remember { mutableListOf<Int>() }
                 var show by remember { mutableStateOf(false) }
                 var inputNumber by remember { mutableStateOf("") }
-                val hateEvenNumbers = remember { mutableListOf<Int>() }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(text = "정수 n이 매개 변수로 주어질 때, n 이하의 홀수가 오름차 순으로 담긴 배열을 return 하도록 solution 함수를 완성 해 주세요.")
@@ -135,8 +134,7 @@ fun Day3(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        val inputNumberToInt = inputNumber.toInt()
-                        if(show) hateEvenNumbers(inputNumberToInt, hateEvenNumbers)
+                        if(show) hateEvenNumbers.addAll(hateEvenNumbers(inputNumber.toInt()))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -155,31 +153,35 @@ fun Day3(choose: String) {
     }
 }
 
-private fun findTheRemainder(num1: String, num2: String, answer: MutableState<Int>) {
-    if(num1.isNotEmpty() && num2.isNotEmpty()) {
-        answer.value = num1.toInt()%num2.toInt()
-        println("나머지 구하기 : ${num1.toInt()%num2.toInt()}")
-    }
+private fun findTheRemainder(num1: Int, num2: Int): Int {
+    println("나머지 구하기")
+    var answer = 0
+    answer = num1%num2
+    return answer
 }
 
-private fun findTheMedian(array: MutableList<Int>, answer: MutableState<Int>) {
-    if(array.isNotEmpty()) {
-        array.sort()
-        answer.value = array[array.size/2]
-        println("중앙값 구하기 : ${array[array.size/2]}")
-    }
+private fun findTheMedian(array: MutableList<Int>): Int {
+    println("중앙값 구하기")
+    var answer = 0
+    array.sort()
+    answer = array[array.size/2]
+    return answer
 }
 
-private fun findTheMode(array: MutableList<Int>, answer: MutableState<Int>) {
+private fun findTheMode(array: MutableList<Int>): Int {
+    println("최빈값 구하기")
+    var answer = 0
     val arrayGroupValue = array.groupBy { it }.entries.sortedByDescending { (_, value) -> value.size }
     val returnValue = if(arrayGroupValue.size > 1 && arrayGroupValue[0].value.size == arrayGroupValue[1].value.size) -1 else arrayGroupValue[0].key
-    answer.value = returnValue
-    println("최빈값 구하기 : $returnValue")
+    answer = returnValue
+    return answer
 }
 
-private fun hateEvenNumbers(inputN: Int, answer: MutableList<Int>) {
-    (0..inputN).filter { it % 2 == 1 }.toIntArray().forEach {
-        answer.add(it)
+private fun hateEvenNumbers(n: Int): MutableList<Int> {
+    println("짝수는 싫어요")
+    val mutableList = mutableListOf<Int>()
+    (0..n).filter { it % 2 == 1 }.toIntArray().forEach {
+        mutableList.add(it)
     }
-    println("짝수는 싫어요 : $answer")
+    return mutableList
 }

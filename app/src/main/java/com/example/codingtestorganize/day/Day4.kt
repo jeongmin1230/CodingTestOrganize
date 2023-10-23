@@ -7,7 +7,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -20,7 +19,7 @@ fun Day4(choose: String) {
         .fillMaxSize()) {
         when(choose) {
             "1" -> {
-                val answer = remember { mutableStateOf(0) }
+                val result = remember { mutableStateOf(0) }
                 var n by remember { mutableStateOf("") }
                 var show by remember { mutableStateOf(false) }
                 Column {
@@ -35,21 +34,21 @@ fun Day4(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) sharingPizza1(n, answer)
+                        if(show) result.value = sharingPizza1(n.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text(text = "피자 나눠 먹기(1) : ${answer.value}")
+                    if(show) Text(text = "피자 나눠 먹기(1) : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
                             n = ""
-                            answer.value = 0
+                            result.value = 0
                         }
                     }
                 }
             }
             "2" -> {
-                val answer = remember { mutableStateOf(0) }
+                val result = remember { mutableStateOf(0) }
                 var n by remember { mutableStateOf("") }
                 var show by remember { mutableStateOf(false) }
                 Column {
@@ -66,21 +65,21 @@ fun Day4(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) sharingPizza2(n, answer)
+                        if(show) result.value = sharingPizza2(n.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text(text = "피자 나눠 먹기(2) : ${answer.value}")
+                    if(show) Text(text = "피자 나눠 먹기(2) : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
                             n = ""
-                            answer.value = 0
+                            result.value = 0
                         }
                     }
                 }
             }
             "3" -> {
-                val answer = remember { mutableStateOf(0) }
+                val result = remember { mutableStateOf(0) }
                 var slice by remember { mutableStateOf("") }
                 var n by remember { mutableStateOf("") }
                 var show by remember { mutableStateOf(false) }
@@ -105,47 +104,47 @@ fun Day4(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) sharingPizza3(slice, n, answer)
+                        if(show) result.value = sharingPizza3(slice.toInt(), n.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text(text = "피자 나눠 먹기(3) : ${answer.value}")
+                    if(show) Text(text = "피자 나눠 먹기(3) : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
                             slice = ""
                             n = ""
-                            answer.value = 0
+                            result.value = 0
                         }
                     }
                 }
             }
             "4" -> {
                 val floatAnswer = remember { mutableStateOf(0.0) }
-                var inputNumbers by remember { mutableStateOf("") }
+                var numbers by remember { mutableStateOf("") }
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(text = "정수 배열 numbers 가 매개 변수로 주어 집니다. numbers 의 원소의 평균 값을 return 하도록 solution 함수를 완성 해 주세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
-                        value = inputNumbers,
-                        onValueChange = { inputNumbers = it },
+                        value = numbers,
+                        onValueChange = { numbers = it },
                         label = { Text(text = ", 기준 numbers 배열 입력")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = inputNumbers.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
+                    val numbersValue = numbers.split(",").map { it.trim() }
+                    val numbersToMutableList = numbersValue.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) averageValueOfArray(intValues, floatAnswer)
+                        if(show) floatAnswer.value = averageValueOfArray(numbersToMutableList)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
                     if(show) Text(text = "배열의 평균 값 : ${floatAnswer.value}")
                     LaunchedEffect(show) {
                         if(!show) {
-                            inputNumbers = ""
-                            intValues.clear()
+                            numbers = ""
+                            numbersToMutableList.clear()
                             floatAnswer.value = 0.0
                         }
                     }
@@ -155,17 +154,19 @@ fun Day4(choose: String) {
     }
 }
 
-private fun sharingPizza1(n: String, answer: MutableState<Int>) {
-    if(n.isNotEmpty()) {
-        answer.value = if(n.toInt()%7 == 0) n.toInt()/7 else n.toInt()/7+1
-        println("피자 나눠 먹기(1) : ${answer.value}")
-    }
+private fun sharingPizza1(n: Int): Int {
+    println("피자 나눠 먹기(1)")
+    var answer = 0
+    answer = if(n%7 == 0) n/7 else n/7+1
+    return answer
 }
 
-private fun sharingPizza2(n: String, answer: MutableState<Int>) {
-    val lcmValue = lcm(n.toInt(), 6)
-    answer.value = lcmValue/6
-    println("피자 나눠 먹기(2) : ${answer.value}")
+private fun sharingPizza2(n: Int): Int {
+    println("피자 나눠 먹기(2)")
+    var answer = 0
+    val lcmValue = lcm(n, 6)
+    answer = lcmValue/6
+    return answer
 }
 
 private fun lcm(a: Int, b: Int): Int {
@@ -179,20 +180,22 @@ private fun gcd(a : Int, b: Int): Int {
     }
 }
 
-private fun sharingPizza3(slice: String, n: String, answer: MutableState<Int>) {
-    if(slice.isNotEmpty() && n.isNotEmpty()) {
-        answer.value = if(n.toInt()%slice.toInt() == 0) n.toInt()/slice.toInt() else n.toInt()/slice.toInt() + 1
-        println("피자 나눠 먹기(3) : ${answer.value}")
-    }
+private fun sharingPizza3(slice: Int, n: Int): Int {
+    println("피자 나눠 먹기(3)")
+    var answer = 0
+    answer = if(n%slice == 0) n/slice else n/slice+1
+    return answer
 }
 
-private fun averageValueOfArray(numbers: MutableList<Int>, answer: MutableState<Double>) {
+private fun averageValueOfArray(numbers: MutableList<Int>): Double {
+    println("배열의 평균값")
     var sum = 0.0
+    var answer = 0.0
     if(numbers.isNotEmpty()) {
         for(i in 0 until numbers.size) {
             sum += numbers[i]
         }
-        answer.value = sum/numbers.size
-        println("배열의 평균값 : ${answer.value}")
+        answer = sum/numbers.size
     }
+    return answer
 }

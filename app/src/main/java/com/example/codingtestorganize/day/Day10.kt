@@ -190,7 +190,7 @@ private fun findTheLocationOfAPoint(dot: MutableList<Int>, result: MutableState<
         else 4
     println("점의 위치 구하기 : ${result.value}")
 }
-/* TODO - 2차원 으로 만들기 */
+
 private fun makeItTwoDimensional(numList: IntArray, n: Int): Array<IntArray> {
     var count = 0
     val answer = Array(numList.size/n) { IntArray(n) }

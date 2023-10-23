@@ -7,7 +7,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -15,12 +14,12 @@ import com.example.codingtestorganize.R
 
 @Composable
 fun Day2(choose: String) {
-    val answer = remember { mutableStateOf(0) }
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
         .fillMaxSize()) {
         when(choose) {
             "1" -> {
+                val result = remember { mutableStateOf(0) }
                 var show by remember { mutableStateOf(false) }
                 var num1 by remember { mutableStateOf("") }
                 var num2 by remember { mutableStateOf("") }
@@ -43,21 +42,22 @@ fun Day2(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) divisionOfTwoNumbers(num1, num2, answer)
+                        if(show) result.value = divisionOfTwoNumbers(num1.toInt(), num2.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text(text = "두 수의 나눗셈 : ${answer.value}")
+                    if(show) Text(text = "두 수의 나눗셈 : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
                             num1 = ""
                             num2 = ""
-                            answer.value = 0
+                            result.value = 0
                         }
                     }
                 }
             }
             "2" -> {
+                val result = remember { mutableStateOf(0) }
                 var show by remember { mutableStateOf(false) }
                 var num1 by remember { mutableStateOf("") }
                 var num2 by remember { mutableStateOf("") }
@@ -80,16 +80,16 @@ fun Day2(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) compareTwoNumbers(num1, num2, answer)
+                        if(show) result.value = compareTwoNumbers(num1.toInt(), num2.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text(text = "숫자 비교 하기 : ${answer.value}")
+                    if(show) Text(text = "숫자 비교 하기 : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
                             num1 = ""
                             num2 = ""
-                            answer.value = 0
+                            result.value = 0
                         }
                     }
                 }
@@ -138,7 +138,7 @@ fun Day2(choose: String) {
 
                     Button(onClick = {
                         show = !show
-                        if(show) additionOfFractions(nu1, de1, nu2, de2, result)
+                        if(show) result.addAll(additionOfFractions(nu1.toInt(), de1.toInt(), nu2.toInt(), de2.toInt()))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -155,24 +155,24 @@ fun Day2(choose: String) {
                 }
             }
             "4" -> {
-                val doubleArray = remember { mutableListOf<Int>() }
+                var doubleArray = remember { mutableListOf<Int>() }
                 var show by remember { mutableStateOf(false) }
-                var inputText by remember { mutableStateOf("") }
+                var numbers by remember { mutableStateOf("") }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(text = "정수 배열 numbers 가 매개 변수로 주어 집니다. numbers 의 각 원소에 두배한 원소를 가진 배열을 return 하도록 solution 함수를 완성 해 주세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
-                        value = inputText,
-                        onValueChange = { inputText = it },
+                        value = numbers,
+                        onValueChange = { numbers = it },
                         label = { Text(text = ", 기준 numbers 배열 입력 ")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = inputText.split(",").map { it.trim() }
+                    val inputValues = numbers.split(",").map { it.trim() }
                     val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        doubleTheArray(intValues, doubleArray)
+                        if(show) doubleArray.addAll(doubleTheArray(intValues))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -181,8 +181,7 @@ fun Day2(choose: String) {
                     }
                     LaunchedEffect(show) {
                         if(!show) {
-                            inputText = ""
-                            intValues.clear()
+                            numbers = ""
                             doubleArray.clear()
                         }
                     }
@@ -192,27 +191,29 @@ fun Day2(choose: String) {
     }
 }
 
-private fun divisionOfTwoNumbers(num1: String, num2: String, answer: MutableState<Int>) {
-    if(num1.isNotEmpty() && num2.isNotEmpty()) {
-        answer.value = (num1.toFloat()/num2.toFloat()*1000).toInt()
-        println("두 수의 나눗셈 : ${(num1.toFloat()/num2.toFloat()*1000).toInt()}")
-    }
+private fun divisionOfTwoNumbers(num1: Int, num2: Int): Int {
+    println("두 수의 나눗셈")
+    var answer = 0
+    answer = (num1.toDouble()/num2.toDouble()*1000).toInt()
+    return answer
 }
 
-private fun compareTwoNumbers(num1: String, num2: String, answer: MutableState<Int>) {
-    if(num1.isNotEmpty() && num2.isNotEmpty()) {
-        answer.value = if(num1 == num2) 1 else -1
-        println("숫자 비교 하기 : ${if(num1 == num2) 1 else -1}")
-    }
+private fun compareTwoNumbers(num1: Int, num2: Int): Int {
+    println("숫자 비교 하기")
+    var answer = 0
+    answer = if(num1 == num2) 1 else -1
+    return answer
 }
 
-private fun additionOfFractions(numer1: String, denom1: String, numer2: String, denom2: String, answer: MutableList<Int>) {
-    val commonDenom = lcm(denom1.toInt(), denom2.toInt())
-    val sumNumer = numer1.toInt() * (commonDenom / denom1.toInt()) + numer2.toInt() * (commonDenom / denom2.toInt())
-    val gcd = gcd(sumNumer, commonDenom)
-    answer.add(sumNumer/gcd)
-    answer.add(commonDenom/gcd)
-    println("분수의 덧셈 : $answer")
+private fun additionOfFractions(numer1: Int, denom1: Int, numer2: Int, denom2: Int): MutableList<Int> {
+    println("분수의 덧셈")
+    val mutableList = mutableListOf<Int>()
+    val commonDenom = lcm(denom1, denom2)
+    val sumNumber = numer1*(commonDenom/denom1) + numer2*(commonDenom/denom2)
+    val gcd = gcd(sumNumber, commonDenom)
+    mutableList.add(sumNumber/gcd)
+    mutableList.add(commonDenom/gcd)
+    return mutableList
 }
 
 private fun lcm(a: Int, b: Int): Int {
@@ -222,11 +223,10 @@ private fun gcd(a: Int, b: Int): Int {
     return if(b == 0) a else gcd(b, a % b)
 }
 
-private fun doubleTheArray(numbers: MutableList<Int>, doubleArray: MutableList<Int>) {
-    if(numbers.toString().isNotEmpty()) {
-        for(i in 0 until numbers.size) {
-            doubleArray.add(numbers[i]*2)
-        }
+private fun doubleTheArray(numbers: MutableList<Int>): MutableList<Int> {
+    println("배열 두 배 만들기")
+    for(i in numbers.indices) {
+        numbers[i] *= 2
     }
-    println("배열 두 배 만들기 : $doubleArray")
+    return numbers
 }
