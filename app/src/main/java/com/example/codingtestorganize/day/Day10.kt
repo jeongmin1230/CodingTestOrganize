@@ -76,10 +76,15 @@ fun Day10(choose: String) {
                         modifier = Modifier.fillMaxWidth()
                     )
                     val inputValues = inputText.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
+                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toIntArray()
                     Button(onClick = {
                         show = !show
-                        if(show) makeItTwoDimensional(intValues, n, result)
+                        if(show) {
+                            val answer = makeItTwoDimensional(intValues, n.toInt())
+                            for(i in answer) {
+                                result.add(i.toMutableList())
+                            }
+                        }
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -186,19 +191,17 @@ private fun findTheLocationOfAPoint(dot: MutableList<Int>, result: MutableState<
     println("점의 위치 구하기 : ${result.value}")
 }
 /* TODO - 2차원 으로 만들기 */
-private fun makeItTwoDimensional(numList: MutableList<Int>, n: String, resultArray: MutableList<MutableList<Int>>) {
+private fun makeItTwoDimensional(numList: IntArray, n: Int): Array<IntArray> {
     var count = 0
-    val answer = Array(numList.size/n.toInt()) { mutableListOf(n.toInt()) }
-    for(i in 0 until (numList.size / n.toInt())) {
-        for(j in 0 until n.toInt()) {
+    val answer = Array(numList.size/n) { IntArray(n) }
+    for(i in 0 until (numList.size / n)) {
+        for(j in 0 until n) {
             answer[i][j] = numList[count]
             count++
         }
     }
-    for(i in answer) {
-        resultArray.add(i)
-    }
-    println("2차원 으로 만들기 : $resultArray")
+    println("2차원 으로 만들기")
+    return answer
 }
 
 private fun throwABall(numbers: MutableList<Int>, k: String, result: MutableState<Int>) {

@@ -49,7 +49,7 @@ fun Day21(choose: String) {
                     }
                 }
             }
-            /* TODO - 안전 지대 다시 */
+            /* TODO - 안전 지대 */
             "2" -> {
                 val result = remember { mutableStateOf(0) }
                 var dots by remember { mutableStateOf("") }

@@ -165,7 +165,6 @@ fun Day20(choose: String) {
     }
 }
 
-/* TODO - 직사갃형 넓이 구하기 */
 private fun findTheAreaOfARectangle(dots: Array<IntArray>, result: MutableState<Int>) {
     var w = 0
     var h = 0

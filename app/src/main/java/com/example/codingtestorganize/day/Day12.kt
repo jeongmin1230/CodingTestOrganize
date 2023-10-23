@@ -7,7 +7,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -97,7 +96,7 @@ fun Day12(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) additionOfHiddenNumbers1(myString, result)
+                        if(show) result.value = additionOfHiddenNumbers1(myString)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -159,9 +158,17 @@ private fun sortingStrings1(myString: String, result: MutableList<Int>) {
     println("문자열 정렬하기(1) : $result")
 }
 
-/* TODO 숨어 있는 숫자의 덧셈(1) */
-private fun additionOfHiddenNumbers1(myString: String, result: MutableState<Int>) {
-    println("숨어 있는 숫자의 덧셈(1) : ${result.value}")
+
+private fun additionOfHiddenNumbers1(myString: String): Int {
+    println("숨어 있는 숫자의 덧셈(1)")
+    val answer = myString.split("")
+    var result = 0
+    for(i in answer.indices) {
+        if(answer[i].toIntOrNull() != null) {
+            result += answer[i].toInt()
+        }
+    }
+    return result
 }
 
 
