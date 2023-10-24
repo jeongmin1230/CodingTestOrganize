@@ -10,9 +10,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.codingtestorganize.*
 import com.example.codingtestorganize.R
-import com.example.codingtestorganize.stringToMutableIntList
-import com.example.codingtestorganize.stringToMutableStringList
 import kotlin.math.abs
 
 @Composable
@@ -65,10 +64,44 @@ fun Day23(choose: String) {
                 }
             }
             "2" -> {
+                /*val result = remember { mutableStateOf(0) }
+                var lines by remember { mutableStateOf("") }
+                var linesList by remember { mutableStateOf(emptyList<List<Int>>()) }
+                var show by remember { mutableStateOf(false) }
+                Column {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(text = "선분 3개가 평행 하게 놓여 있습니다. " +
+                            "세 선분의 시작과 끝 좌표가 [[start, end], [start, end], [start, end]] 형태로 들어 있는 2차원 배열 lines 가 매개 변수로 주어질 때, " +
+                            "두 개 이상의 선분이 겹치는 부분의 길이를 return 하도록 solution 함수를 완성 해 보세요.")
+                    Spacer(modifier = Modifier.height(10.dp))
+                    TextField(
+                        value = lines,
+                        onValueChange = { lines = it },
+                        label = { Text(text = "x1, y1| x2, y2| x3, y3 형식 입력") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Button(onClick = {
+                        show = !show
+                        linesList = parsePointInput(lines)
+                        if(show) result.value = lengthOfOverlappingLineSegments(
+                            convertListOfListsToArray(linesList)
+                        )
+                    }) {
+                        Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
+                    }
+                    if(show) Text("겹치는 선분의 길이 : ${result.value}")
+                    LaunchedEffect(show) {
+                        if(!show) {
+                            lines = ""
+                            result.value = 0
+                        }
+                    }
+                }*/
                 /* TODO - 등수 매기기 */
-                val result = remember { mutableStateOf(0) }
-                var dots by remember { mutableStateOf("") }
-                var coordinates: Array<IntArray> by remember { mutableStateOf(emptyArray()) }
+                val result = remember { mutableListOf<Int>() }
+                var score by remember { mutableStateOf("") }
+                var scoreList by remember { mutableStateOf(emptyList<List<Int>>()) }
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
@@ -77,30 +110,26 @@ fun Day23(choose: String) {
                             "영어 점수와 수학 점수의 평균을 기준으로 매긴 등수를 담은 배열을 return 하도록 solution 함수를 완성 해 주세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
-                        value = dots,
-                        onValueChange = { dots = it },
-                        label = { Text(text = "0, 0, 0, 0, 0 | 0, 0, 0, 0, 0 | 0, 0, 0, 0, 0 | 0, 0, 1, 0, 0 | 0, 0, 0, 0, 0 형태로 배열 입력")},
+                        value = score,
+                        onValueChange = { score = it },
+                        label = { Text(text = "영어 점수, 수학 점수| 영어 점수, 수학 점수| 영어 점수, 수학 점수| 영어 점수, 수학 점수 형태로 배열 입력")},
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val pairs = dots.split(" | ")
-                    val final = pairs.map { pair ->
-                        val (x, y) = pair.split(", ").map { it.substring(1, it.length - 1).toInt() }
-                        intArrayOf(x, y)
-                    }.toTypedArray()
                     Button(onClick = {
                         show = !show
-                        if(show) ranking(final, result)
+                        scoreList = parsePointInput(score)
+                        if(show) result.addAll(ranking(convertListOfListsToArray(scoreList)))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
                     if(show) {
-                        Text(text = "등수 매기기 : ${result.value}")
+                        Text(text = "등수 매기기 : $result")
                     }
                     LaunchedEffect(show) {
                         if(!show) {
-                            dots = ""
-                            result.value = 0
+                            score = ""
+                            result.clear()
                         }
                     }
                 }
@@ -185,8 +214,21 @@ private fun unusualArrangement(numList: MutableList<Int>, n: Int, result: Mutabl
     println("특이한 정렬 : $result")
 }
 
-private fun ranking(board: Array<IntArray>, result: MutableState<Int>) {
-    println("등수 매기기 : ${result.value}")
+private fun ranking(score: Array<IntArray>): MutableList<Int> {
+    println("등수 매기기")
+    val students = score.size
+    val ranking = mutableListOf<Int>()
+    for(i in ranking.indices) {
+        ranking[i] = 1
+    }
+    for(i in 0 until students) {
+        for(j in 0 until students) {
+            if(score[i][0] + score[i][1] < score[j][0] + score[j][1]) {
+                ranking[i]++
+            }
+        }
+    }
+    return ranking
 }
 
 private fun babbling(babblingList: MutableList<String>, result: MutableState<Int>) {

@@ -9,10 +9,10 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.example.codingtestorganize.*
 import com.example.codingtestorganize.R
-import com.example.codingtestorganize.stringToMutableIntList
-import com.example.codingtestorganize.stringToMutableStringList
 
 @Composable
 fun Day21(choose: String) {
@@ -55,7 +55,8 @@ fun Day21(choose: String) {
             "2" -> {
                 val result = remember { mutableStateOf(0) }
                 var dots by remember { mutableStateOf("") }
-                var coordinates: Array<IntArray> by remember { mutableStateOf(emptyArray()) }
+                var dotsList by remember { mutableStateOf(emptyList<List<Int>>()) }
+                var boardCopy by remember { mutableStateOf(emptyList<List<Int>>()) }
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
@@ -70,14 +71,11 @@ fun Day21(choose: String) {
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val pairs = dots.split(" | ")
-                    val final = pairs.map { pair ->
-                        val (x, y) = pair.split(", ").map { it.substring(1, it.length - 1).toInt() }
-                        intArrayOf(x, y)
-                    }.toTypedArray()
                     Button(onClick = {
                         show = !show
-                        if(show) safeZone(final, result)
+                        dotsList = parsePointInput(dots)
+                        boardCopy = parsePointInput(dots).toList()
+                        if(show) result.value = safeZone(dotsList, boardCopy)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -177,13 +175,36 @@ private fun additionOfHiddenNumbers2(myString: String, result: MutableState<Int>
     println("숨어 있는 숫자의 덧셈(2) : ${result.value}")
 }
 
-private fun safeZone(board: Array<IntArray>, result: MutableState<Int>) {
-    for(i in board) {
-        for(j in i) {
-            println("j : $j")
+fun safeZone(board: List<List<Int>>, boardCopy: List<List<Int>>): Int {
+    println("안전 지대")
+    val boomBoard = boardCopy
+    var answer = 0
+
+    for(i in board.indices) {
+        for(j in 0 until board[i].size) {
+            if(board[i][j] == 1) {
+                boomPoint(convertListOfListsToArray(boomBoard), i, j)
+            }
         }
     }
-    println("안전 지대 : ${result.value}")
+    boomBoard.forEach { answer += it.count { i -> i == 0} }
+    return answer
+}
+
+
+private fun boomPoint(boomBoard: Array<IntArray>, row: Int, col: Int) {
+    val fromRow = if(row - 1 < 0) row else row - 1
+    val toRow = if(row + 1 >= boomBoard.size) row else row + 1
+    val fromCol = if(col - 1 < 0) col else col - 1
+    val toCol = if(col + 1 >= boomBoard.size) col else col + 1
+
+    for(i in fromRow..toRow) {
+        for(j in fromCol..toCol) {
+            if(boomBoard[i][j] == 0) {
+                boomBoard[i][j] = -1
+            }
+        }
+    }
 }
 
 private fun conditionsForCompletionOfATriangle(sides: MutableList<Int>, result: MutableState<Int>) {

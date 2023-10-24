@@ -26,3 +26,15 @@ fun stringToIntArray(input: String): IntArray {
     val inputValues = input.split(",").map { it.trim() }
     return inputValues.mapNotNull { it.toIntOrNull() }.toIntArray()
 }
+
+fun parsePointInput(input: String): List<List<Int>> {
+    val pointStrings = input.split("|")
+    return pointStrings.map { pointString ->
+        val coordinates = pointString.split(",").map { it.toInt() }
+        coordinates
+    }
+}
+
+fun convertListOfListsToArray(listOfLists: List<List<Int>>): Array<IntArray> {
+    return listOfLists.map { it.toIntArray() }.toTypedArray()
+}

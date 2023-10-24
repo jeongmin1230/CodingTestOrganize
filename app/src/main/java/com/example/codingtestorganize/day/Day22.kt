@@ -13,6 +13,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.convertListOfListsToArray
+import com.example.codingtestorganize.parsePointInput
+import com.example.codingtestorganize.stringToMutableIntList
+import kotlin.math.abs
 
 @Composable
 fun Day22(choose: String) {
@@ -52,11 +56,10 @@ fun Day22(choose: String) {
                     }
                 }
             }
-            /* TODO - 평행 */
             "2" -> {
                 val result = remember { mutableStateOf(0) }
                 var dots by remember { mutableStateOf("") }
-                var coordinates: Array<IntArray> by remember { mutableStateOf(emptyArray()) }
+                var dotsList by remember { mutableStateOf(emptyList<List<Int>>()) }
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
@@ -67,18 +70,14 @@ fun Day22(choose: String) {
                     TextField(
                         value = dots,
                         onValueChange = { dots = it },
-                        label = { Text(text = "0, 0, 0, 0, 0 | 0, 0, 0, 0, 0 | 0, 0, 0, 0, 0 | 0, 0, 1, 0, 0 | 0, 0, 0, 0, 0 형태로 배열 입력")},
+                        label = { Text(text = "x1, y1| x2, y2| x3, y3| x4, y4 형태로 배열 입력")},
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val pairs = dots.split(" | ")
-                    val final = pairs.map { pair ->
-                        val (x, y) = pair.split(", ").map { it.substring(1, it.length - 1).toInt() }
-                        intArrayOf(x, y)
-                    }.toTypedArray()
                     Button(onClick = {
                         show = !show
-                        if(show) parallel(final, result)
+                        dotsList = parsePointInput(dots)
+                        if(show) result.value = parallel(convertListOfListsToArray(dotsList))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -93,10 +92,10 @@ fun Day22(choose: String) {
                     }
                 }
             }
-            /* TODO - 겹치는 선분의 길이 */
             "3" -> {
                 val result = remember { mutableStateOf(0) }
-                var sides by remember { mutableStateOf("") }
+                var lines by remember { mutableStateOf("") }
+                var linesList by remember { mutableStateOf(emptyList<List<Int>>()) }
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
@@ -105,24 +104,23 @@ fun Day22(choose: String) {
                             "두 개 이상의 선분이 겹치는 부분의 길이를 return 하도록 solution 함수를 완성 해 보세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
-                        value = sides,
-                        onValueChange = { sides = it },
-                        label = { Text(text = ", 기준 sides 배열 입력") },
+                        value = lines,
+                        onValueChange = { lines = it },
+                        label = { Text(text = "x1, y1| x2, y2| x3, y3 형식 입력") },
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val sidesValue = sides.split(",").map { it.trim() }
-                    val sidesValueToArray = sidesValue.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) lengthOfOverlappingLineSegments(sidesValueToArray, result)
+                        linesList = parsePointInput(lines)
+                        if(show) result.value = lengthOfOverlappingLineSegments(convertListOfListsToArray(linesList))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
                     if(show) Text("겹치는 선분의 길이 : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
-                            sides = ""
+                            lines = ""
                             result.value = 0
                         }
                     }
@@ -185,12 +183,37 @@ private fun curseNumber3(n: String, result: MutableState<Int>) {
     println("저주의 숫자 3 : ${result.value}")
 }
 
-private fun parallel(board: Array<IntArray>, result: MutableState<Int>) {
-    println("평행 : ${result.value}")
+private fun parallel(dots: Array<IntArray>): Int {
+    println("평행")
+    val x1 = dots[0][0]
+    val y1 = dots[0][1]
+    val x2 = dots[1][0]
+    val y2 = dots[1][1]
+    val x3 = dots[2][0]
+    val y3 = dots[2][1]
+    val x4 = dots[3][0]
+    val y4 = dots[3][1]
+
+    if (abs((x1 - x2) * (y3 - y4)) == abs((y1 - y2) * (x3 - x4))) {
+        return 1
+    }
+    if (abs((x1 - x3) * (y2 - y4)) == abs((y1 - y3) * (x2 - x4))) {
+        return 1
+    }
+    if (abs((x1 - x4) * (y2 - y3)) == abs((y1 - y4) * (x2 - x3))) {
+        return 1
+    }
+    return 0
 }
 
-private fun lengthOfOverlappingLineSegments(sides: MutableList<Int>, result: MutableState<Int>) {
-    println("겹치는 선분의 길이 : ${result.value}")
+private fun lengthOfOverlappingLineSegments(lines: Array<IntArray>): Int {
+    println("겹치는 선분의 길이")
+    return lines.map { List(abs(it[1]-it[0])) { r ->
+        List(2) { c -> (it[0] + r) + c } } }
+        .flatten()
+        .groupBy { it }
+        .filter { it.value.size > 1 }
+        .size
 }
 
 private fun gcd(a: Int, b: Int): Int{

@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.parsePointInput
 import com.example.codingtestorganize.stringToMutableIntList
 import com.example.codingtestorganize.stringToMutableStringList
 import kotlin.math.abs
@@ -175,13 +176,13 @@ private fun findTheAreaOfARectangle(dots: List<List<Int>>): Int {
     return answer
 }
 
-private fun parsePointInput(input: String): List<List<Int>> {
+/*private fun parsePointInput(input: String): List<List<Int>> {
     val pointStrings = input.split(" | ")
     return pointStrings.map { pointString ->
         val coordinates = pointString.split(",").map { it.toInt() }
         coordinates
     }
-}
+}*/
 
 private fun charactersCoordinates(keyInput: MutableList<String>, board: MutableList<Int>, result: MutableList<Int>) {
     val answer = arrayOf(0, 0)
