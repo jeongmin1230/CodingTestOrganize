@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.stringToMutableIntList
+import com.example.codingtestorganize.stringToMutableStringList
 
 @Composable
 fun Day21(choose: String) {
@@ -107,11 +109,9 @@ fun Day21(choose: String) {
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val sidesValue = sides.split(",").map { it.trim() }
-                    val sidesValueToArray = sidesValue.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) conditionsForCompletionOfATriangle(sidesValueToArray, result)
+                        if(show) conditionsForCompletionOfATriangle(stringToMutableIntList(sides), result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -147,11 +147,9 @@ fun Day21(choose: String) {
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val spellValue = spell.split(",").map { it.trim() }.toMutableList()
-                    val dicValue = dic.split(",").map { it.trim() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) alienLanguageDictionary(spellValue, dicValue, result)
+                        if(show) alienLanguageDictionary(stringToMutableStringList(spell), stringToMutableStringList(dic), result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }

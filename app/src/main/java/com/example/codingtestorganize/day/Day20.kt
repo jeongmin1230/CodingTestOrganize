@@ -12,6 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.stringToMutableIntList
+import com.example.codingtestorganize.stringToMutableStringList
 import kotlin.math.abs
 
 @Composable
@@ -79,12 +81,9 @@ fun Day20(choose: String) {
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val keyInputValues = keyInput.split(",").map { it.trim() }.toMutableList()
-                    val boardValues = board.split(",").map { it.trim() }
-                    val boardValuesToArray = boardValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) charactersCoordinates(keyInputValues, boardValuesToArray, result)
+                        if(show) charactersCoordinates(stringToMutableStringList(keyInput), stringToMutableIntList(board), result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -113,11 +112,9 @@ fun Day20(choose: String) {
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val numbersValue = numbers.split(",").map { it.trim() }
-                    val numbersValueToArray = numbersValue.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) createMaximumValue2(numbersValueToArray, result)
+                        if(show) createMaximumValue2(stringToMutableIntList(numbers), result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }

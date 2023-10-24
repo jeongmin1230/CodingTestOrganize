@@ -7,11 +7,11 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.stringToMutableIntList
 
 @Composable
 fun Day5(choose: String) {
@@ -108,23 +108,21 @@ fun Day5(choose: String) {
             }
             "4" -> {
                 val resultArray = remember { mutableListOf<Int>() }
-                var inputText by remember { mutableStateOf("") }
+                var numList by remember { mutableStateOf("") }
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(text = "정수가 들어 있는 배열 num list 가 매개 변수로 주어 집니다. num list 의 원소의 순서를 거꾸로 뒤집은 배열을 return 하도록 solution 함수를 완성 해 주세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
-                        value = inputText,
-                        onValueChange = { inputText = it },
+                        value = numList,
+                        onValueChange = { numList = it },
                         label = { Text(text = ", 기준 num list 배열 입력 ")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = inputText.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) resultArray.addAll(flipArray(intValues))
+                        if(show) resultArray.addAll(flipArray(stringToMutableIntList(numList)))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -133,7 +131,7 @@ fun Day5(choose: String) {
                     }
                     LaunchedEffect(show) {
                         if(!show) {
-                            inputText = ""
+                            numList = ""
                             resultArray.clear()
                         }
                     }

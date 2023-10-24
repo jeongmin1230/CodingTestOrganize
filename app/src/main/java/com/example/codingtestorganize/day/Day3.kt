@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.stringToMutableIntList
 
 @Composable
 fun Day3(choose: String) {
@@ -57,30 +58,27 @@ fun Day3(choose: String) {
             "2" -> {
                 val result = remember { mutableStateOf(0) }
                 var show by remember { mutableStateOf(false) }
-                var inputText by remember { mutableStateOf("") }
+                var array by remember { mutableStateOf("") }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(text = "중앙 값은 어떤 주어진 값들을 크기의 순서 대로 정렬 했을 때 가장 중앙에 위치 하는 값을 의미 합니다. 예를 들어 1, 2, 7, 10, 11의 중앙 값은 7입니다. 정수 배열 array 가 매개 변수로 주어질 때, 중앙 값을 return 하도록 solution 함수를 완성 해 보세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
-                        value = inputText,
-                        onValueChange = { inputText = it },
+                        value = array,
+                        onValueChange = { array = it },
                         label = { Text(text = ", 기준 array 배열 입력 ")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = inputText.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) result.value = findTheMedian(intValues)
+                        if(show) result.value = findTheMedian(stringToMutableIntList(array))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
                     if(show) Text(text = "중앙값 구하기 : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
-                            inputText = ""
-                            intValues.clear()
+                            array = ""
                             result.value = 0
                         }
                     }
@@ -89,30 +87,27 @@ fun Day3(choose: String) {
             "3" -> {
                 val result = remember { mutableStateOf(0) }
                 var show by remember { mutableStateOf(false) }
-                var inputText by remember { mutableStateOf("") }
+                var array by remember { mutableStateOf("") }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "최빈 값은 주어진 값 중에서 가장 자주 나오는 값을 의미 합니다. 정수 배열 array 가 매개 변수로 주어질 때, 최빈 값을 return 하도록 solution 함수를 완성 해 보세요. 최빈 값이 여러 개면 -1을 return 합니다.")
+                    Text(text = "최빈값은 주어진 값 중에서 가장 자주 나오는 값을 의미 합니다. 정수 배열 array 가 매개 변수로 주어질 때, 최빈 값을 return 하도록 solution 함수를 완성 해 보세요. 최빈 값이 여러 개면 -1을 return 합니다.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
-                        value = inputText,
-                        onValueChange = { inputText = it },
+                        value = array,
+                        onValueChange = { array = it },
                         label = { Text(text = ", 기준 array 배열 입력 ")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = inputText.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) result.value = findTheMode(intValues)
+                        if(show) result.value = findTheMode(stringToMutableIntList(array))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
                     if(show) Text(text = "최빈값 구하기 : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
-                            inputText = ""
-                            intValues.clear()
+                            array = ""
                             result.value = 0
                         }
                     }

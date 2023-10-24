@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.stringToMutableIntList
 
 @Composable
 fun Day6(choose: String) {
@@ -93,11 +94,9 @@ fun Day6(choose: String) {
                         label = { Text(text = ", 기준 num list 배열 입력 ")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = numList.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) evenOddNumber(intValues, resultArray)
+                        if(show) evenOddNumber(stringToMutableIntList(numList), resultArray)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }

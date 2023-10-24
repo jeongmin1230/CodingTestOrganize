@@ -11,6 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.gcd
+import com.example.codingtestorganize.lcm
+import com.example.codingtestorganize.stringToMutableIntList
 
 @Composable
 fun Day2(choose: String) {
@@ -155,7 +158,7 @@ fun Day2(choose: String) {
                 }
             }
             "4" -> {
-                var doubleArray = remember { mutableListOf<Int>() }
+                val doubleArray = remember { mutableListOf<Int>() }
                 var show by remember { mutableStateOf(false) }
                 var numbers by remember { mutableStateOf("") }
                 Column {
@@ -168,11 +171,9 @@ fun Day2(choose: String) {
                         label = { Text(text = ", 기준 numbers 배열 입력 ")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = numbers.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) doubleArray.addAll(doubleTheArray(intValues))
+                        if(show) doubleArray.addAll(doubleTheArray(stringToMutableIntList(numbers)))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -214,13 +215,6 @@ private fun additionOfFractions(numer1: Int, denom1: Int, numer2: Int, denom2: I
     mutableList.add(sumNumber/gcd)
     mutableList.add(commonDenom/gcd)
     return mutableList
-}
-
-private fun lcm(a: Int, b: Int): Int {
-    return a * b / gcd(a, b)
-}
-private fun gcd(a: Int, b: Int): Int {
-    return if(b == 0) a else gcd(b, a % b)
 }
 
 private fun doubleTheArray(numbers: MutableList<Int>): MutableList<Int> {

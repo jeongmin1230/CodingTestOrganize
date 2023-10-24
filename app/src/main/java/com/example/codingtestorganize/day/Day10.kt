@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.stringToMutableIntList
 import java.util.*
 
 @Composable
@@ -26,7 +27,9 @@ fun Day10(choose: String) {
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "사분면은 한 평면을 x축과 y축을 기준 으로 나눈 네 부분 입니다. 사분면은 아래와 같이 1부터 4까지 번호를매깁니다.")
+                    Text(text = "사분면은 한 평면을 x축과 y축을 기준 으로 나눈 네 부분 입니다. 사분면은 아래와 같이 1부터 4까지 번호를매깁니다. " +
+                            "x 좌표 (x, y)를 차례 대로 담은 정수 배열 dot 이 매개 변수로 주어 집니다. " +
+                            "좌표 dot 이 사분면 중 어디에 속하는지 1, 2, 3, 4 중 하나를 return 하도록 solution 함수를 완성 해 주세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = dot,
@@ -34,11 +37,9 @@ fun Day10(choose: String) {
                         label = { Text(text = ", 기준 dot 배열 입력")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = dot.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) findTheLocationOfAPoint(intValues, result)
+                        if(show) findTheLocationOfAPoint(stringToMutableIntList(dot), result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }

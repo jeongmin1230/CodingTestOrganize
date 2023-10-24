@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.stringToMutableIntList
+import com.example.codingtestorganize.stringToMutableStringList
 
 @Composable
 fun Day16(choose: String) {
@@ -64,11 +66,9 @@ fun Day16(choose: String) {
                         label = { Text(text = ", 기준 array 배열 입력")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = array.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) findTheLargestNumber(intValues, result)
+                        if(show) findTheLargestNumber(stringToMutableIntList(array), result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -133,11 +133,9 @@ fun Day16(choose: String) {
                         label = { Text(text = ", 기준 s2 배열 입력")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val s1InputValues = s1.split(",").map { it.trim() }.toMutableList()
-                    val s2InputValues = s2.split(",").map { it.trim() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) similarityOfArrays(s1InputValues, s2InputValues, result)
+                        if(show) similarityOfArrays(stringToMutableStringList(s1), stringToMutableStringList(s2), result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }

@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.lcm
+import com.example.codingtestorganize.stringToMutableIntList
 
 @Composable
 fun Day4(choose: String) {
@@ -132,11 +134,9 @@ fun Day4(choose: String) {
                         label = { Text(text = ", 기준 numbers 배열 입력")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val numbersValue = numbers.split(",").map { it.trim() }
-                    val numbersToMutableList = numbersValue.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) floatAnswer.value = averageValueOfArray(numbersToMutableList)
+                        if(show) floatAnswer.value = averageValueOfArray(stringToMutableIntList(numbers))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -144,7 +144,6 @@ fun Day4(choose: String) {
                     LaunchedEffect(show) {
                         if(!show) {
                             numbers = ""
-                            numbersToMutableList.clear()
                             floatAnswer.value = 0.0
                         }
                     }
@@ -167,17 +166,6 @@ private fun sharingPizza2(n: Int): Int {
     val lcmValue = lcm(n, 6)
     answer = lcmValue/6
     return answer
-}
-
-private fun lcm(a: Int, b: Int): Int {
-    return a * b / gcd(a, b)
-}
-private fun gcd(a : Int, b: Int): Int {
-    return if(a < b) {
-        if(a == 0) b else gcd(a, b % a)
-    } else {
-        if(b == 0) a else gcd(b, a % b)
-    }
 }
 
 private fun sharingPizza3(slice: Int, n: Int): Int {

@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.stringToMutableIntList
 
 @Composable
 fun Day8(choose: String) {
@@ -49,11 +50,9 @@ fun Day8(choose: String) {
                         label = { Text(text = "num2 입력")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = numbers.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) trimArray(intValues, num1, num2, result)
+                        if(show) trimArray(stringToMutableIntList(numbers), num1, num2, result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -113,11 +112,9 @@ fun Day8(choose: String) {
                         label = { Text(text = ", 기준 emergency 배열 입력")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = emergency.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) decidingTheOrderOfTreatment(intValues, resultArray)
+                        if(show) decidingTheOrderOfTreatment(stringToMutableIntList(emergency), resultArray)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }

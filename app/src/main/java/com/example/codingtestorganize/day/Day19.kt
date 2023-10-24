@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.stringToMutableIntList
 
 @Composable
 fun Day19(choose: String) {
@@ -33,11 +34,9 @@ fun Day19(choose: String) {
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val arrayValues = array.split(",").map { it.trim() }
-                    val arrayValuesToArray = arrayValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) numberOf7(arrayValuesToArray, result)
+                        if(show) numberOf7(stringToMutableIntList(array), result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -113,11 +112,9 @@ fun Day19(choose: String) {
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val arrayValues = array.split(",").map { it.trim() }
-                    val arrayValuesToArray = arrayValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) numberOfDuplicateNumbers(arrayValuesToArray, n, result)
+                        if(show) numberOfDuplicateNumbers(stringToMutableIntList(array), n, result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -153,11 +150,9 @@ fun Day19(choose: String) {
                         label = { Text(text = "정수 height")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val arrayValues = array.split(",").map { it.trim() }
-                    val arrayValuesToArray = arrayValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) aPersonTallerThanAShyPerson(arrayValuesToArray, height, result)
+                        if(show) aPersonTallerThanAShyPerson(stringToMutableIntList(array), height, result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }

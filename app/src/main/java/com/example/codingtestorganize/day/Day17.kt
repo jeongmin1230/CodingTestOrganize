@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.stringToMutableIntList
+import com.example.codingtestorganize.stringToMutableStringList
 
 @Composable
 fun Day17(choose: String) {
@@ -81,11 +83,9 @@ fun Day17(choose: String) {
                         label = { Text(text = ", 기준 numList 배열 입력")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = numList.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) chooseAMultipleOfN(n, intValues, result)
+                        if(show) chooseAMultipleOfN(n, stringToMutableIntList(numList), result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -143,10 +143,9 @@ fun Day17(choose: String) {
                         label = { Text(text = ", 기준 quiz 배열 입력")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val quizValues = quiz.split(",").map { it.trim() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) oxQuiz(quizValues, result)
+                        if(show) oxQuiz(stringToMutableStringList(quiz), result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }

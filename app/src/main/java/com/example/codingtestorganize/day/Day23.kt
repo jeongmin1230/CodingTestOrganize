@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.stringToMutableIntList
+import com.example.codingtestorganize.stringToMutableStringList
 import kotlin.math.abs
 
 @Composable
@@ -44,11 +46,9 @@ fun Day23(choose: String) {
                         label = { Text(text = "정수 n")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val numListValue = numList.split(",").map { it.trim() }
-                    val numListValueToArray = numListValue.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) unusualArrangement(numListValueToArray, n.toInt(), result)
+                        if(show) unusualArrangement(stringToMutableIntList(numList), n.toInt(), result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -121,10 +121,9 @@ fun Day23(choose: String) {
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val babblingValue = babbling.split(",").map { it.trim() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) babbling(babblingValue, result)
+                        if(show) babbling(stringToMutableStringList(babbling), result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }

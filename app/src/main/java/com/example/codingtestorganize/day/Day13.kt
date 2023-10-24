@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
+import com.example.codingtestorganize.stringToMutableIntList
 
 @Composable
 fun Day13(choose: String) {
@@ -24,7 +25,7 @@ fun Day13(choose: String) {
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "숫자와 \"Z\"가 공백 으로 구분 되어 담긴 문자 열이 주어 집니다. 문자 열에 있는 숫자를 차례 대로 더하려고 합니다. 이 때 \"Z\"가 나오면 바로 전에 더했던 숫자를 뺀다는 뜻 입니다. 숫자와 \"Z\"로 이루어 진 문자열 s가 주어질 때, 머쓱이가 구한 값을 return 하도록 solution 함수를 완성 해 보세요.")
+                    Text(text = "숫자와 [Z]가 공백 으로 구분 되어 담긴 문자 열이 주어 집니다. 문자 열에 있는 숫자를 차례 대로 더하려고 합니다. 이 때 \"Z\"가 나오면 바로 전에 더했던 숫자를 뺀다는 뜻 입니다. 숫자와 \"Z\"로 이루어 진 문자열 s가 주어질 때, 머쓱이가 구한 값을 return 하도록 solution 함수를 완성 해 보세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = s,
@@ -61,13 +62,12 @@ fun Day13(choose: String) {
                     TextField(
                         value = strList,
                         onValueChange = { strList = it },
-                        label = { Text(text = "문자열 myString")},
+                        label = { Text(text = ", 기준 문자열 strList 입력")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = strList.split(" ").map { it.trim() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) lengthOfArrayElements(inputValues, result)
+                        if(show) lengthOfArrayElements(strList.split(",").map { it.trim() }.toMutableList(), result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -126,11 +126,9 @@ fun Day13(choose: String) {
                         label = { Text(text = ", 기준 sides 배열 입력") },
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = sides.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) conditionsForCompletingATriangle(intValues, result)
+                        if(show) conditionsForCompletingATriangle(stringToMutableIntList(sides), result)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
