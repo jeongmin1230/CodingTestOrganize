@@ -9,6 +9,7 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
 import kotlin.math.abs
@@ -22,62 +23,26 @@ fun Day20(choose: String) {
             /* TODO - 직사각형 넓이 구하기*/
             "1" -> {
                 val result = remember { mutableStateOf(0) }
-                val dots = remember { mutableListOf<IntArray>() }
-                var dot1 by remember { mutableStateOf("") }
-                var dot2 by remember { mutableStateOf("") }
-                var dot3 by remember { mutableStateOf("") }
-                var dot4 by remember { mutableStateOf("") }
+                var pointInput by remember { mutableStateOf(TextFieldValue()) }
+                var pointsList by remember { mutableStateOf(emptyList<List<Int>>()) }
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(text = "2차원 좌표 평면에 변이 축과 평행한 직사각형이 있습니다. 직사각형 네 꼭짓점 의 좌표 [[x1, y1], [x2, y2], [x3, y3], [x4, y4]]가 담겨 있는 배열 dots 가 매개 변수로 주어질 때, 직사각형의 넓이를 return 하도록 solution 함수를 완성 해 보세요.")
                     Spacer(modifier = Modifier.height(10.dp))
-                    Row {
-                        TextField(
-                            value = dot1,
-                            onValueChange = { dot1 = it },
-                            label = { Text(text = "x1, y1 형태로 배열 입력")},
-                            modifier = Modifier.weight(1f)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        TextField(
-                            value = dot2,
-                            onValueChange = { dot2 = it },
-                            label = { Text(text = "x2, y2 형태로 배열 입력")},
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row {
-                        TextField(
-                            value = dot3,
-                            onValueChange = { dot3 = it },
-                            label = { Text(text = "x3, y3 형태로 배열 입력")},
-                            modifier = Modifier.weight(1f)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        TextField(
-                            value = dot4,
-                            onValueChange = { dot4 = it },
-                            label = { Text(text = "x4, y4 형태로 배열 입력")},
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                    val dot1ToMutableList = dot1.split(",")
-                    val dot1ToInt = dot1ToMutableList.mapNotNull { it.toIntOrNull() }.toIntArray()
-                    val dot2ToMutableList = dot2.split(",")
-                    val dot2ToInt = dot2ToMutableList.mapNotNull { it.toIntOrNull() }.toIntArray()
-                    val dot3ToMutableList = dot3.split(",")
-                    val dot3ToInt = dot3ToMutableList.mapNotNull { it.toIntOrNull() }.toIntArray()
-                    val dot4ToMutableList = dot4.split(",")
-                    val dot4ToInt = dot4ToMutableList.mapNotNull { it.toIntOrNull() }.toIntArray()
-                    dots.add(dot1ToInt)
-                    dots.add(dot2ToInt)
-                    dots.add(dot3ToInt)
-                    dots.add(dot4ToInt)
+                    TextField(
+                        value = pointInput,
+                        onValueChange = {
+                            pointInput = it
+                        },
+                        singleLine = true,
+                        placeholder = { Text("x1, y1 | x2, y2 | x3, y3 | x4, y4 형태로 입력")},
+                        modifier = Modifier.fillMaxWidth()
+                    )
                     Button(onClick = {
                         show = !show
-                        if(show) result.value = findTheAreaOfARectangle(dots)
+                        pointsList = parsePointInput(pointInput.text)
+                        if(show) result.value = findTheAreaOfARectangle(pointsList)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -87,7 +52,6 @@ fun Day20(choose: String) {
                     LaunchedEffect(show) {
                         if(!show) {
                             result.value = 0
-                            dots.clear()
                         }
                     }
                 }
@@ -199,7 +163,7 @@ fun Day20(choose: String) {
     }
 }
 
-private fun findTheAreaOfARectangle(dots: MutableList<IntArray>): Int {
+private fun findTheAreaOfARectangle(dots: List<List<Int>>): Int {
     println("직사각형 넓이 구하기")
     var answer = 0
     var w = 0
@@ -212,6 +176,14 @@ private fun findTheAreaOfARectangle(dots: MutableList<IntArray>): Int {
     }
     answer = w * h
     return answer
+}
+
+private fun parsePointInput(input: String): List<List<Int>> {
+    val pointStrings = input.split(" | ")
+    return pointStrings.map { pointString ->
+        val coordinates = pointString.split(",").map { it.toInt() }
+        coordinates
+    }
 }
 
 private fun charactersCoordinates(keyInput: MutableList<String>, board: MutableList<Int>, result: MutableList<Int>) {
