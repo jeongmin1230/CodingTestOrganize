@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.*
 import com.example.codingtestorganize.R
+import kotlinx.coroutines.handleCoroutineException
 import kotlin.math.abs
 
 @Composable
@@ -64,41 +65,6 @@ fun Day23(choose: String) {
                 }
             }
             "2" -> {
-                /*val result = remember { mutableStateOf(0) }
-                var lines by remember { mutableStateOf("") }
-                var linesList by remember { mutableStateOf(emptyList<List<Int>>()) }
-                var show by remember { mutableStateOf(false) }
-                Column {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "선분 3개가 평행 하게 놓여 있습니다. " +
-                            "세 선분의 시작과 끝 좌표가 [[start, end], [start, end], [start, end]] 형태로 들어 있는 2차원 배열 lines 가 매개 변수로 주어질 때, " +
-                            "두 개 이상의 선분이 겹치는 부분의 길이를 return 하도록 solution 함수를 완성 해 보세요.")
-                    Spacer(modifier = Modifier.height(10.dp))
-                    TextField(
-                        value = lines,
-                        onValueChange = { lines = it },
-                        label = { Text(text = "x1, y1| x2, y2| x3, y3 형식 입력") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Button(onClick = {
-                        show = !show
-                        linesList = parsePointInput(lines)
-                        if(show) result.value = lengthOfOverlappingLineSegments(
-                            convertListOfListsToArray(linesList)
-                        )
-                    }) {
-                        Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
-                    }
-                    if(show) Text("겹치는 선분의 길이 : ${result.value}")
-                    LaunchedEffect(show) {
-                        if(!show) {
-                            lines = ""
-                            result.value = 0
-                        }
-                    }
-                }*/
-                /* TODO - 등수 매기기 */
                 val result = remember { mutableListOf<Int>() }
                 var score by remember { mutableStateOf("") }
                 var scoreList by remember { mutableStateOf(emptyList<List<Int>>()) }
@@ -112,7 +78,7 @@ fun Day23(choose: String) {
                     TextField(
                         value = score,
                         onValueChange = { score = it },
-                        label = { Text(text = "영어 점수, 수학 점수| 영어 점수, 수학 점수| 영어 점수, 수학 점수| 영어 점수, 수학 점수 형태로 배열 입력")},
+                        label = { Text(text = "영어, 수학 점수| 영어, 수학 점수| 영어, 수학 점수| 영어, 수학 점수 형태로 배열 입력")},
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
@@ -166,10 +132,9 @@ fun Day23(choose: String) {
                 }
             }
             "4" -> {
-                /* TODO - 로그인 성공? */
-                val result = remember { mutableStateOf(0) }
+                val result = remember { mutableStateOf("") }
                 var idPw by remember { mutableStateOf("") }
-                var dic by remember { mutableStateOf("") }
+                var db by remember { mutableStateOf("") }
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
@@ -186,10 +151,19 @@ fun Day23(choose: String) {
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val idPwValue = idPw.split(",").map { it.trim() }.toMutableList()
+                    TextField(
+                        value = db,
+                        onValueChange = { db = it },
+                        label = { Text(text = "id1, pw1| id2, pw2| id3, pw3 형식 으로 배열 입력")},
+                        modifier = Modifier.fillMaxWidth()
+                    )
                     Button(onClick = {
                         show = !show
-//                        if(show) loginSucceed(idPwValue, dicValue, result)
+                        val idPwArray = idPw.split(",").map { it.trim() }.toTypedArray()
+                        val dbArray = db.split("|").map { it.trim() }
+                            .map { db -> db.split(",").map { it.trim() }.toTypedArray() }
+                            .toTypedArray()
+                        if(show) result.value = loginSucceed(idPwArray, dbArray)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -197,8 +171,8 @@ fun Day23(choose: String) {
                     LaunchedEffect(show) {
                         if(!show) {
                             idPw = ""
-                            dic = ""
-                            result.value = 0
+                            db = ""
+                            result.value = ""
                         }
                     }
                 }
@@ -214,29 +188,42 @@ private fun unusualArrangement(numList: MutableList<Int>, n: Int, result: Mutabl
     println("특이한 정렬 : $result")
 }
 
-private fun ranking(score: Array<IntArray>): MutableList<Int> {
+fun ranking(score: Array<IntArray>): MutableList<Int> {
     println("등수 매기기")
-    val students = score.size
-    val ranking = mutableListOf<Int>()
-    for(i in ranking.indices) {
-        ranking[i] = 1
-    }
-    for(i in 0 until students) {
-        for(j in 0 until students) {
-            if(score[i][0] + score[i][1] < score[j][0] + score[j][1]) {
-                ranking[i]++
+    val ranks = MutableList(score.size) { 1 }
+
+    for (i in score.indices) {
+        for (j in score.indices) {
+            if (i != j && (score[i][0] + score[i][1]) < (score[j][0] + score[j][1])) {
+                ranks[i]++
             }
         }
     }
-    return ranking
-}
 
+    return ranks
+}
 private fun babbling(babblingList: MutableList<String>, result: MutableState<Int>) {
     val regex = "aya|ye|woo|ma".toRegex()
     result.value = babblingList.map { it.replace(regex, "") }.count { it.isEmpty() }
     println("옹알이(1) : ${result.value}")
 }
 
-private fun loginSucceed(spell: MutableList<String>, dic: MutableList<String>, result: MutableState<Int>) {
-    println("로그인 성공? : ${result.value}" )
+fun loginSucceed(id_pw: Array<String>, db: Array<Array<String>>): String {
+    val inputId = id_pw[0]
+    val inputPw = id_pw[1]
+
+    for (userInfo in db) {
+        val userId = userInfo[0]
+        val userPw = userInfo[1]
+
+        if (inputId == userId) {
+            return if (inputPw == userPw) {
+                "login"
+            } else {
+                "wrong pw"
+            }
+        }
+    }
+
+    return "fail"
 }

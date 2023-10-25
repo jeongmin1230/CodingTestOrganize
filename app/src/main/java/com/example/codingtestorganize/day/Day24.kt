@@ -133,6 +133,7 @@ fun Day24(choose: String) {
                 }
             }
             "4" -> {
+                /* TODO - k 의 개수 */
                 val result = remember { mutableStateOf(0) }
                 var i by remember { mutableStateOf("") }
                 var j by remember { mutableStateOf("") }

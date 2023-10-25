@@ -9,7 +9,6 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.*
 import com.example.codingtestorganize.R
@@ -51,12 +50,11 @@ fun Day21(choose: String) {
                     }
                 }
             }
-            /* TODO - 안전 지대 */
+
             "2" -> {
                 val result = remember { mutableStateOf(0) }
                 var dots by remember { mutableStateOf("") }
                 var dotsList by remember { mutableStateOf(emptyList<List<Int>>()) }
-                var boardCopy by remember { mutableStateOf(emptyList<List<Int>>()) }
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
@@ -74,8 +72,7 @@ fun Day21(choose: String) {
                     Button(onClick = {
                         show = !show
                         dotsList = parsePointInput(dots)
-                        boardCopy = parsePointInput(dots).toList()
-                        if(show) result.value = safeZone(dotsList, boardCopy)
+                        if(show) result.value = safeZone(dotsList)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -175,19 +172,19 @@ private fun additionOfHiddenNumbers2(myString: String, result: MutableState<Int>
     println("숨어 있는 숫자의 덧셈(2) : ${result.value}")
 }
 
-fun safeZone(board: List<List<Int>>, boardCopy: List<List<Int>>): Int {
+fun safeZone(board: List<List<Int>>): Int {
     println("안전 지대")
-    val boomBoard = boardCopy
     var answer = 0
+    val convertBoard = convertListOfListsToArray(board)
 
-    for(i in board.indices) {
-        for(j in 0 until board[i].size) {
-            if(board[i][j] == 1) {
-                boomPoint(convertListOfListsToArray(boomBoard), i, j)
+    for (i in board.indices) {
+        for (j in 0 until board[i].size) {
+            if (board[i][j] == 1) {
+                boomPoint(convertBoard, i, j)
             }
         }
     }
-    boomBoard.forEach { answer += it.count { i -> i == 0} }
+    convertBoard.forEach { answer += it.count { i -> i == 0 } }
     return answer
 }
 

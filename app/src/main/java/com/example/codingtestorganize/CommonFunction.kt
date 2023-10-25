@@ -19,7 +19,7 @@ fun stringToMutableIntList(input: String): MutableList<Int> {
 }
 
 fun stringToMutableStringList(input: String): MutableList<String> {
-    return  input.split(",").map { it.trim() }.toMutableList()
+    return  input.split(",").map { it.replace(" ", "") }.toMutableList()
 }
 
 fun stringToIntArray(input: String): IntArray {
