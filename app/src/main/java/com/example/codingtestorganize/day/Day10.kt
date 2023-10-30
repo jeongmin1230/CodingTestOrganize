@@ -39,7 +39,7 @@ fun Day10(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) findTheLocationOfAPoint(stringToMutableIntList(dot), result)
+                        if(show) result.value = findTheLocationOfAPoint(stringToMutableIntList(dot))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -55,13 +55,17 @@ fun Day10(choose: String) {
                 }
             }
             "2" -> {
+                /* TODO - return 받아 오는 것 까지 다시 구성 */
                 val result = remember { mutableListOf(mutableListOf<Int>()) }
                 var inputText by remember { mutableStateOf("") }
                 var n by remember { mutableStateOf("") }
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "정수 배열 num list 와 정수 n이 매개 변수로 주어 집니다. num list 를 다음 설명과 같이 2차원 배열로 바꿔 return 하도록 solution 함수를 완성 해 주세요. num list 가 [1, 2, 3, 4, 5, 6, 7, 8] 로 길이가 8이고 n이 2이므로 num list 를 2 * 4 배열로 다음과 같이 변경 합니다. 2차원 으로 바꿀 때에는 num list 의 원소 들을 앞에서 부터 n개씩 나눠 2차원 배열로 변경 합니다.")
+                    Text(text = "정수 배열 num list 와 정수 n이 매개 변수로 주어 집니다. " +
+                            "num list 를 다음 설명과 같이 2차원 배열로 바꿔 return 하도록 solution 함수를 완성 해 주세요. " +
+                            "num list 가 [1, 2, 3, 4, 5, 6, 7, 8] 로 길이가 8이고 n이 2이므로 num list 를 2 * 4 배열로 다음과 같이 변경 합니다. " +
+                            "2차원 으로 바꿀 때에는 num list 의 원소 들을 앞에서 부터 n개씩 나눠 2차원 배열로 변경 합니다.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = inputText,
@@ -106,7 +110,10 @@ fun Day10(choose: String) {
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "머쓱이는 친구들과 동그랗게 서서 공 던지기 게임을 하고 있습니다. 공은 1번부터 던지며 오른쪽 으로 한 명을 건너 뛰고 그다음 사람 에게만 던질 수 있습니다. 친구 들의 번호가 들어 있는 정수 배열 numbers 와 정수 K가 주어질 때, k 번째로 공을 던지는 사람의 번호는 무엇 인지 return 하도록 solution 함수를 완성 해 보세요.")
+                    Text(text = "머쓱이는 친구들과 동그랗게 서서 공 던지기 게임을 하고 있습니다. " +
+                            "공은 1번부터 던지며 오른쪽 으로 한 명을 건너 뛰고 그다음 사람 에게만 던질 수 있습니다. " +
+                            "친구 들의 번호가 들어 있는 정수 배열 numbers 와 정수 K가 주어질 때, " +
+                            "k 번째로 공을 던지는 사람의 번호는 무엇 인지 return 하도록 solution 함수를 완성 해 보세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = numbers,
@@ -121,11 +128,9 @@ fun Day10(choose: String) {
                         label = { Text(text = "정수 k") },
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = numbers.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) throwABall(intValues, k, result)
+                        if(show) result.value = throwABall(stringToMutableIntList(numbers), k)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -146,7 +151,8 @@ fun Day10(choose: String) {
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "정수가 담긴 배열 numbers 와 문자열 direction 가 매개 변수로 주어 집니다. 배열 numbers 의 원소를 direction 방향 으로 한 칸씩 회전 시킨 배열을 return 하도록 solution 함수를 완성 해 주세요.")
+                    Text(text = "정수가 담긴 배열 numbers 와 문자열 direction 가 매개 변수로 주어 집니다." +
+                            " 배열 numbers 의 원소를 direction 방향 으로 한 칸씩 회전 시킨 배열을 return 하도록 solution 함수를 완성 해 주세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = numbers,
@@ -161,11 +167,9 @@ fun Day10(choose: String) {
                         label = { Text(text = "direction") },
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = numbers.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) rotatingAnArray(intValues, direction, result)
+                        if(show) result.addAll(rotatingAnArray(stringToMutableIntList(numbers), direction))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -183,13 +187,12 @@ fun Day10(choose: String) {
     }
 }
 
-private fun findTheLocationOfAPoint(dot: MutableList<Int>, result: MutableState<Int>) {
-    result.value =
-        if(dot[0] > 0 && dot[1] > 0) 1
+private fun findTheLocationOfAPoint(dot: MutableList<Int>): Int {
+    println("점의 위치 구하기")
+    return if(dot[0] > 0 && dot[1] > 0) 1
         else if(dot[0] < 0 && dot[1] > 0) 2
         else if(dot[0] < 0 && dot[1] < 0) 3
         else 4
-    println("점의 위치 구하기 : ${result.value}")
 }
 
 private fun makeItTwoDimensional(numList: IntArray, n: Int): Array<IntArray> {
@@ -205,15 +208,17 @@ private fun makeItTwoDimensional(numList: IntArray, n: Int): Array<IntArray> {
     return answer
 }
 
-private fun throwABall(numbers: MutableList<Int>, k: String, result: MutableState<Int>) {
-    result.value = numbers[(k.toInt()-1)*2%numbers.size]
-    println("공 던지기 : ${result.value}")
+private fun throwABall(numbers: MutableList<Int>, k: String): Int {
+    println("공 던지기")
+    return numbers[(k.toInt()-1)*2%numbers.size]
 }
 
-private fun rotatingAnArray(numbers: MutableList<Int>, direction: String, result: MutableList<Int>) {
+private fun rotatingAnArray(numbers: MutableList<Int>, direction: String): MutableList<Int> {
+    println("배열 회전 시키기" )
+    val answer = mutableListOf<Int>()
     val list = numbers.toList()
     if(direction == "left") Collections.rotate(list, -1)
     else Collections.rotate(list, 1)
-    result.addAll(list)
-    println("배열 회전 시키기 : $result" )
+    answer.addAll(list)
+    return answer
 }

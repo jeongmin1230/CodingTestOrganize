@@ -7,7 +7,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -28,7 +27,8 @@ fun Day8(choose: String) {
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "정수 배열 numbers 와 정수 num1, num2가 매개 변수로 주어질 때, numbers 의 num1번 째 인덱스 부터 num2번째 인덱스 까지 자른 정수 배열을 return 하도록 solution 함수를 완성 해 보세요.")
+                    Text(text = "정수 배열 numbers 와 정수 num1, num2가 매개 변수로 주어질 때, " +
+                            "numbers 의 num1번 째 인덱스 부터 num2번째 인덱스 까지 자른 정수 배열을 return 하도록 solution 함수를 완성 해 보세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = numbers,
@@ -52,7 +52,7 @@ fun Day8(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) trimArray(stringToMutableIntList(numbers), num1, num2, result)
+                        if(show) result.addAll(trimArray(stringToMutableIntList(numbers), num1.toInt(), num2.toInt()))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -70,12 +70,15 @@ fun Day8(choose: String) {
                 }
             }
             "2" -> {
-                val answer = remember { mutableStateOf("") }
+                val result = remember { mutableStateOf("") }
                 var age by remember { mutableStateOf("") }
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "우주 여행을 하던 머쓱이는 엔진 고장 으로 PROGRAMMERS-962 행성에 불시착 하게 됐습니다. 입국 심사 에서 나이를 말해야 하는데, PROGRAMMERS-962 행성 에서는 나이를 알파벳 으로 말하고 있습니다. a는 0, b는 1, c는 2, ..., j는 9입니다. 예를 들어 23살은 cd, 51살은 fb로 표현 합니다. 나이 age 가 매개 변수로 주어질 때 PROGRAMMER-962식 나이를 return 하도록 solution 함수를 완성 해 주세요.")
+                    Text(text = "우주 여행을 하던 머쓱이는 엔진 고장 으로 PROGRAMMERS-962 행성에 불시착 하게 됐습니다. " +
+                            "입국 심사 에서 나이를 말해야 하는데, PROGRAMMERS-962 행성 에서는 나이를 알파벳 으로 말하고 있습니다. " +
+                            "a는 0, b는 1, c는 2, ..., j는 9입니다. 예를 들어 23살은 cd, 51살은 fb로 표현 합니다. " +
+                            "나이 age 가 매개 변수로 주어질 때 PROGRAMMER-962식 나이를 return 하도록 solution 함수를 완성 해 주세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = age,
@@ -85,15 +88,15 @@ fun Day8(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) ageOfExoPlanets(age, answer)
+                        if(show) result.value = ageOfExoPlanets(age)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text("외계 행성의 나이 : ${answer.value.removePrefix("null").removeSuffix("null")}")
+                    if(show) Text("외계 행성의 나이 : ${result.value.removePrefix("null").removeSuffix("null")}")
                     LaunchedEffect(show) {
                         if(!show) {
                             age = ""
-                            answer.value = ""
+                            result.value = ""
                         }
                     }
                 }
@@ -104,7 +107,8 @@ fun Day8(choose: String) {
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "외과 의사 머쓱이는 응급실 에 온 환자의 응급도 를 기준 으로 진료 순서를 정하 려고 합니다. 정수 배열 emergency 가 매개 변수로 주어질 때 응급 도가 높은 순서 대로 진료 순서를 정한 배열을 return 하도록 solution 함수를 완성 해 주세요.")
+                    Text(text = "외과 의사 머쓱이는 응급실 에 온 환자의 응급도 를 기준 으로 진료 순서를 정하 려고 합니다." +
+                            " 정수 배열 emergency 가 매개 변수로 주어질 때 응급 도가 높은 순서 대로 진료 순서를 정한 배열을 return 하도록 solution 함수를 완성 해 주세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = emergency,
@@ -114,7 +118,7 @@ fun Day8(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) decidingTheOrderOfTreatment(stringToMutableIntList(emergency), resultArray)
+                        if(show) resultArray.addAll(decidingTheOrderOfTreatment(stringToMutableIntList(emergency)))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -130,12 +134,13 @@ fun Day8(choose: String) {
                 }
             }
             "4" -> {
-                val answer = remember { mutableStateOf(0) }
+                val result = remember { mutableStateOf(0) }
                 var n by remember { mutableStateOf("") }
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "순서쌍 이란 두 개의 숫자를 순서를 정하여 짝지어 나타낸 쌍으로 (a, b)로 표기 합니다. 자연수 n이 매개 변수로 주어질 때 두 숫자의 곱이 n인 자연수 순서 쌍의 개수를 return 하도록 solution 함수를 완성 해 주세요.")
+                    Text(text = "순서쌍 이란 두 개의 숫자를 순서를 정하여 짝지어 나타낸 쌍으로 (a, b)로 표기 합니다. " +
+                            "자연수 n이 매개 변수로 주어질 때 두 숫자의 곱이 n인 자연수 순서 쌍의 개수를 return 하도록 solution 함수를 완성 해 주세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = n,
@@ -145,15 +150,15 @@ fun Day8(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) numbersOfOrderedPairs(n, answer)
+                        if(show) result.value = numbersOfOrderedPairs(n.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text("순서 쌍의 개수 : ${answer.value}")
+                    if(show) Text("순서 쌍의 개수 : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
                             n = ""
-                            answer.value = 0
+                            result.value = 0
                         }
                     }
                 }
@@ -162,12 +167,16 @@ fun Day8(choose: String) {
     }
 }
 
-private fun trimArray(numbers: MutableList<Int>, num1: String, num2: String, answer: MutableList<Int>) {
-    answer.addAll(numbers.toList().subList(num1.toInt(), num2.toInt()+1))
-    println("배열 자르기 : $answer")
+private fun trimArray(numbers: MutableList<Int>, num1: Int, num2: Int): MutableList<Int> {
+    println("배열 자르기")
+    val list = mutableListOf<Int>()
+    list.addAll(numbers.toList().subList(num1, num2+1))
+    return list
 }
 
-private fun ageOfExoPlanets(age: String, answer: MutableState<String>) {
+private fun ageOfExoPlanets(age: String): String {
+    println("외계 행성의 나이 ")
+    var answer = ""
     val map = mapOf(
         "0" to "a",
         "1" to "b",
@@ -181,21 +190,25 @@ private fun ageOfExoPlanets(age: String, answer: MutableState<String>) {
         "9" to "j"
     )
     age.split("").forEach {
-        answer.value += map[it]
+        answer += map[it]
     }
-    println("외계 행성의 나이 : ${answer.value}")
+    return answer
 }
 
-private fun decidingTheOrderOfTreatment(emergency: MutableList<Int>, resultArray: MutableList<Int>) {
-    resultArray.addAll(emergency.map { emergency.sortedDescending().indexOf(it) + 1 })
-    println("진료 순서 정하기 : $resultArray")
+private fun decidingTheOrderOfTreatment(emergency: MutableList<Int>): MutableList<Int> {
+    println("진료 순서 정하기")
+    val list = mutableListOf<Int>()
+    list.addAll(emergency.map { emergency.sortedDescending().indexOf(it) + 1 })
+    return list
 }
 
-private fun numbersOfOrderedPairs(n: String, answer: MutableState<Int>) {
-    for(i in 1 .. n.toInt()) {
-        if(n.toInt() % i == 0) {
-            answer.value++
+private fun numbersOfOrderedPairs(n: Int): Int {
+    println("순서쌍의 개수")
+    var answer = 0
+    for(i in 1 .. n) {
+        if(n % i == 0) {
+            answer++
         }
     }
-    println("순서쌍의 개수 : ${answer.value}")
+    return answer
 }

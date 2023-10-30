@@ -25,7 +25,13 @@ fun Day9(choose: String) {
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "개미 군단이 사냥을 나가려고 합니다. 개미 군단은 사냥 감의 체력에 딱 맞는 병력을 데리고 나가려고 합니다. 장군 개미는 5의 공격 력을, 병정 개미는 3의 공격력 을 일 개미는 1의 공격 력을 가지고 있습니다. 예를 들어 체력 23의 여치를 사냥 하려고 할 때, 일개미 23마리를 데리고 가도 되지만, 장군 개미 네 마리와 병정 개미 한 마리를 데리고 간다면 더 적은 병력 으로 사냥할 수 있습니다. 사냥감 의 체력 hp가 매개 변수로 주어질 때, 사냥감 의 체력에 딱 맞게 최소 한의 병력을 구성 하려면 몇 마리의 개미가 필요 한지를 return 하도록 solution 함수를 완성 해 주세요.")
+                    Text(text = "개미 군단이 사냥을 나가려고 합니다. " +
+                            "개미 군단은 사냥 감의 체력에 딱 맞는 병력을 데리고 나가려고 합니다. " +
+                            "장군 개미는 5의 공격 력을, 병정 개미는 3의 공격력 을 일 개미는 1의 공격 력을 가지고 있습니다. " +
+                            "예를 들어 체력 23의 여치를 사냥 하려고 할 때, " +
+                            "일개미 23마리를 데리고 가도 되지만, 장군 개미 네 마리와 병정 개미 한 마리를 데리고 간다면 " +
+                            "더 적은 병력 으로 사냥할 수 있습니다. 사냥감 의 체력 hp가 매개 변수로 주어질 때, " +
+                            "사냥감 의 체력에 딱 맞게 최소 한의 병력을 구성 하려면 몇 마리의 개미가 필요 한지를 return 하도록 solution 함수를 완성 해 주세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = hp,
@@ -35,9 +41,9 @@ fun Day9(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) antArmy(hp, result)
+                        if(show) result.value = antArmy(hp.toInt())
                     }) {
-                        Text(if(!show) "hp 입력" else "다시 입력")
+                        Text(if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
                     if(show) Text("개미 군단 : ${result.value}")
                     LaunchedEffect(show) {
@@ -54,7 +60,9 @@ fun Day9(choose: String) {
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "머쓱이는 친구 에게 모스 부호를 이용한 편지를 받았습니다. 그냥은 읽을 수 없어 이를 해독 하는 프로 그램을 만들 려고 합니다. 문자열 letter 가 매개 변수로 주어질 때, letter 를 영어 소 문자로 바꾼 문자 열을 return 하도록 solution 함수를 완성 해 보세요.")
+                    Text(text = "머쓱이는 친구 에게 모스 부호를 이용한 편지를 받았습니다. " +
+                            "그냥은 읽을 수 없어 이를 해독 하는 프로 그램을 만들 려고 합니다. " +
+                            "문자열 letter 가 매개 변수로 주어질 때, letter 를 영어 소 문자로 바꾼 문자 열을 return 하도록 solution 함수를 완성 해 보세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = letter,
@@ -64,7 +72,7 @@ fun Day9(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) morseCode1(letter, result)
+                        if(show) result.value = morseCode1(letter)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -83,7 +91,9 @@ fun Day9(choose: String) {
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "가위는 2 바위는 0 보는 5로 표현 합니다. 가위 바위 보를 내는 순서 대로 나타낸 문자열 rsp 가 매개 변수로 주어질 때, rsp 에 저장된 가위 바위 보를 모두 이기는 경우를 순서 대로 나타낸 문자 열을 return 하도록 solution 함수를 완성 해 보세요.")
+                    Text(text = "가위는 2 바위는 0 보는 5로 표현 합니다. " +
+                            "가위 바위 보를 내는 순서 대로 나타낸 문자열 rsp 가 매개 변수로 주어질 때, " +
+                            "rsp 에 저장된 가위 바위 보를 모두 이기는 경우를 순서 대로 나타낸 문자 열을 return 하도록 solution 함수를 완성 해 보세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = rsp,
@@ -93,7 +103,7 @@ fun Day9(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) rockPaperScissors(rsp, result)
+                        if(show) result.value = rockPaperScissors(rsp)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -113,7 +123,10 @@ fun Day9(choose: String) {
                 var show by remember { mutableStateOf(false) }
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "머쓱이는 구슬을 친구들 에게 나누어 주려고 합니다. 구슬은 모두 다르게 생겼 습니다. 머쓱이가 갖고 있는 구슬의 개수 balls 와 친구들 에게 나누어 줄 구슬 개수 share 이 매개 변수로 주어질 때, balls 개의 구슬 중 share 개의 구슬을 고르는 가능한 모든 경우의 수를 return 하는 solution 함수를 완성 해 주세요.")
+                    Text(text = "머쓱이는 구슬을 친구들 에게 나누어 주려고 합니다. " +
+                            "구슬은 모두 다르게 생겼 습니다. " +
+                            "머쓱이가 갖고 있는 구슬의 개수 balls 와 친구들 에게 나누어 줄 구슬 개수 share 이 매개 변수로 주어질 때, " +
+                            "balls 개의 구슬 중 share 개의 구슬을 고르는 가능한 모든 경우의 수를 return 하는 solution 함수를 완성 해 주세요.")
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = balls,
@@ -130,7 +143,7 @@ fun Day9(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) numberOfWaysToDivideBeads(balls, share, result)
+                        if(show) result.value = numberOfWaysToDivideBeads(balls.toInt(), share.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -148,12 +161,14 @@ fun Day9(choose: String) {
     }
 }
 
-private fun antArmy(hp:  String, answer: MutableState<Int>) {
-    answer.value = hp.toInt()/5 + (hp.toInt() % 5 / 3) + (hp.toInt() % 5 % 3)
-    println("개미 군단 : ${answer.value}")
+private fun antArmy(hp:  Int): Int {
+    println("개미 군단")
+    return hp/5 + (hp % 5 / 3) + (hp % 5 % 3)
 }
 
-private fun morseCode1(letter:  String, result: MutableState<String>) {
+private fun morseCode1(letter:  String): String {
+    println("모스 부호(1)")
+    var answer = ""
     val morse = mapOf(
         ".-" to "a",
         "-..." to "b",
@@ -183,26 +198,28 @@ private fun morseCode1(letter:  String, result: MutableState<String>) {
         "--.." to "z"
     )
     letter.split(" ").forEach {
-        result.value += morse[it]
+        answer += morse[it]
     }
-    println("모스 부호(1) : ${result.value}")
+    return answer
 }
 
-private fun rockPaperScissors(rsp: String, result: MutableState<String>) {
+private fun rockPaperScissors(rsp: String): String {
+    println("가위 바위 보")
+    var answer = ""
     val winRsp = mapOf(
         "2" to "0",
         "0" to "5",
         "5" to "2"
     )
     rsp.split("").forEach {
-        result.value += winRsp[it]
+        answer += winRsp[it]
     }
-    println("가위 바위 보 : ${result.value}")
+    return answer
 }
 
-private fun numberOfWaysToDivideBeads(balls: String, share: String, result: MutableState<Int>) {
-    result.value = combination(balls.toInt(), share.toInt())
-    println("구슬을 나누는 경우의 수 : ${result.value}")
+private fun numberOfWaysToDivideBeads(balls: Int, share: Int): Int {
+    println("구슬을 나누는 경우의 수")
+    return combination(balls, share)
 }
 
 private fun combination(n: Int, r: Int): Int {
