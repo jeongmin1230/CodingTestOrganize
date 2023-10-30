@@ -22,11 +22,6 @@ fun stringToMutableStringList(input: String): MutableList<String> {
     return  input.split(",").map { it.replace(" ", "") }.toMutableList()
 }
 
-fun stringToIntArray(input: String): IntArray {
-    val inputValues = input.split(",").map { it.trim() }
-    return inputValues.mapNotNull { it.toIntOrNull() }.toIntArray()
-}
-
 fun parsePointInput(input: String): List<List<Int>> {
     val pointStrings = input.split("|")
     return pointStrings.map { pointString ->

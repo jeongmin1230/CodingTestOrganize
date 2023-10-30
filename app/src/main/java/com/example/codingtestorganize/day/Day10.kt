@@ -55,7 +55,6 @@ fun Day10(choose: String) {
                 }
             }
             "2" -> {
-                /* TODO - return 받아 오는 것 까지 다시 구성 */
                 val result = remember { mutableListOf(mutableListOf<Int>()) }
                 var inputText by remember { mutableStateOf("") }
                 var n by remember { mutableStateOf("") }

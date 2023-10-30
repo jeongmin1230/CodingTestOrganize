@@ -98,6 +98,7 @@ fun EnterDayIndex() {
                 "22" -> Day22(choose)
                 "23" -> Day23(choose)
                 "24" -> Day24(choose)
+                "25" -> Day25(choose)
             }
         }
     }
