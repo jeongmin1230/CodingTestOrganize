@@ -35,7 +35,7 @@ fun Day12(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) removeVowels(myString, result)
+                        if(show) result.value = removeVowels(myString)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -66,7 +66,7 @@ fun Day12(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) sortingStrings1(myString, result)
+                        if(show) result.addAll(sortingStrings1(myString))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -125,7 +125,7 @@ fun Day12(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) factorization(n, result)
+                        if(show) result.addAll(factorization(n.toInt()))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -142,20 +142,19 @@ fun Day12(choose: String) {
     }
 }
 
-private fun removeVowels(myString: String, result: MutableState<String>) {
-    var answer = ""
-    answer = myString
+private fun removeVowels(myString: String): String {
+    println("모음 제거")
+    var answer = myString
     val vowels = listOf("a", "e", "i", "o", "u")
     for(i in vowels) {
         answer = answer.replace(i, "")
     }
-    result.value = answer
-    println("모음 제거 : ${result.value}")
+    return answer
 }
 
-private fun sortingStrings1(myString: String, result: MutableList<Int>) {
-    result.addAll(myString.filter { it.isDigit() }.toList().map { it.digitToInt() }.sorted())
-    println("문자열 정렬하기(1) : $result")
+private fun sortingStrings1(myString: String): List<Int> {
+    println("문자열 정렬하기(1)")
+    return myString.filter { it.isDigit() }.toList().map { it.digitToInt() }.sorted()
 }
 
 
@@ -172,16 +171,19 @@ private fun additionOfHiddenNumbers1(myString: String): Int {
 }
 
 
-private fun factorization(n: String, result: MutableList<Int>) {
-    var num = n.toInt()
+private fun factorization(n: Int): List<Int> {
+    println("소 인수 분해")
+    var num = n
+    val list: MutableList<Int> = ArrayList()
     var i = 2
-    while(num >= i) {
-        if(num%i == 0){
-            if(!result.contains(i)) result.add(i)
+
+    while (num >= 2) {
+        if (num % i == 0) {
+            list.add(i)
             num /= i
         } else {
             i++
         }
     }
-    println("소인수 분해 : $result" )
+    return list.distinct()
 }

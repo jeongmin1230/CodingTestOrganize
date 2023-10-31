@@ -45,7 +45,7 @@ fun Day14(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) closeNumber(stringToMutableIntList(array), n, result)
+                        if(show) result.value = closeNumber(stringToMutableIntList(array), n.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -77,7 +77,7 @@ fun Day14(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) game369(order, result)
+                        if(show) result.value = game369(order)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -115,7 +115,7 @@ fun Day14(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) decryption(cipher, code, result)
+                        if(show) result.value = decryption(cipher, code.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -145,7 +145,7 @@ fun Day14(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) uppercaseAndLowerCaseLetters(myString, result)
+                        if(show) result.value = uppercaseAndLowerCaseLetters(myString)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -162,32 +162,36 @@ fun Day14(choose: String) {
     }
 }
 
-private fun closeNumber(array: MutableList<Int>, n: String, result: MutableState<Int>) {
-    result.value = array.sorted().minWithOrNull(compareBy { abs(it-n.toInt()) }) ?: 0
-    println("가까운 수 : ${result.value}")
+private fun closeNumber(array: MutableList<Int>, n: Int): Int {
+    println("가까운 수")
+    return array.sorted().minWithOrNull(compareBy { abs(it-n) }) ?: 0
 }
 
-private fun game369(order: String, result: MutableState<Int>) {
+private fun game369(order: String): Int {
+    println("369게임")
     var count = 0
     order.split("").forEach { if(it == "3" || it == "6" || it == "9") count++ }
-    result.value = count
-    println("369게임 : $result")
+    return count
 }
 
-private fun decryption(cipher: String, code: String, result: MutableState<String>) {
+private fun decryption(cipher: String, code: Int): String {
+    println("암호 해독")
+    var answer = ""
     for(i in cipher.indices) {
-        if((i+1) % code.toInt() == 0) {
-            result.value += cipher[i]
+        if((i+1) % code == 0) {
+            answer += cipher[i]
         }
     }
-    println("암호 해독 : ${result.value}")
+    return answer
 }
 
 
-private fun uppercaseAndLowerCaseLetters(myString: String, result: MutableState<String>) {
+private fun uppercaseAndLowerCaseLetters(myString: String): String {
+    println("대문자와 소문자")
+    var answer = ""
     for(i in myString) {
-        if(i.isUpperCase()) result.value += i.lowercase()
-        else result.value += i.uppercase()
+        answer += if(i.isUpperCase()) i.lowercase()
+        else i.uppercase()
     }
-    println("대문자와 소문자 : ${result.value}" )
+    return answer
 }

@@ -35,7 +35,7 @@ fun Day15(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) hateEnglish(numbers, result)
+                        if(show) result.value = hateEnglish(numbers)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -82,7 +82,7 @@ fun Day15(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) changeIndex(myString, num1, num2, result)
+                        if(show) result.value = changeIndex(myString, num1.toInt(), num2.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -114,7 +114,7 @@ fun Day15(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) characterThatAppearsOnlyOnce(s, result)
+                        if(show) result.value = characterThatAppearsOnlyOnce(s)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -143,7 +143,7 @@ fun Day15(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) findingDivisors(n, result)
+                        if(show) result.addAll(findingDivisors(n.toInt()))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -160,7 +160,11 @@ fun Day15(choose: String) {
     }
 }
 
-private fun hateEnglish(numbers: String, result: MutableState<Int>) {
+/* TODO - 영어가 싫어요 */
+private fun hateEnglish(numbers: String): Int {
+    println("영어가 싫어요")
+    println("뭐라 햇냐 $numbers")
+    var answer = numbers
     val map = mapOf(
         "zero" to "0",
         "one" to "1",
@@ -173,37 +177,37 @@ private fun hateEnglish(numbers: String, result: MutableState<Int>) {
         "eight" to "8",
         "nine" to "9"
     )
-    val answer = mutableStateOf(numbers)
     map.forEach {
-        answer.value = answer.value.replace(it.key, it.value)
+        answer += answer.replace(it.key, it.value)
     }
-    result.value = answer.value.toInt()
-    println("영어가 싫어요 : ${result.value}")
+    return answer.toInt()
 }
 
-private fun changeIndex(myString: String, num1: String, num2: String, result: MutableState<String>) {
+private fun changeIndex(myString: String, num1: Int, num2: Int): String {
+    println("인덱스 바꾸기")
     val chars = myString.toCharArray()
-    val tmp = chars[num1.toInt()]
-    chars[num1.toInt()] = chars[num2.toInt()]
-    chars[num2.toInt()] = tmp
-    result.value = String(chars)
-    println("인덱스 바꾸기 : ${result.value}")
+    val tmp = chars[num1]
+    chars[num1] = chars[num2]
+    chars[num2] = tmp
+    return String(chars)
 }
 
-private fun characterThatAppearsOnlyOnce(s: String, result: MutableState<String>) {
-    result.value = s.toList().filter { unique ->
+private fun characterThatAppearsOnlyOnce(s: String): String {
+    println("한 번만 등장한 문자")
+    return s.toList().filter { unique ->
         s.count{ it == unique } == 1
     }.sorted().joinToString("")
-    println("한 번만 등장한 문자 : ${result.value}")
 }
 
 
-private fun findingDivisors(n: String, result: MutableList<Int>) {
-    val list = (1..n.toInt()).toList()
+private fun findingDivisors(n: Int): List<Int> {
+    val answer = mutableListOf<Int>()
+    println("약수 구하기")
+    val list = (1..n).toList()
     for(i in list) {
-        if(n.toInt() % i == 0) {
-            result.add(i)
+        if(n % i == 0) {
+            answer.add(i)
         }
     }
-    println("약수 구하기 : $result" )
+    return answer
 }

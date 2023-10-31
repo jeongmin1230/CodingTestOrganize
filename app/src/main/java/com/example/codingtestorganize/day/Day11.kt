@@ -42,11 +42,9 @@ fun Day11(choose: String) {
                         label = { Text(text = "정수 n")},
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val inputValues = box.split(",").map { it.trim() }
-                    val intValues = inputValues.mapNotNull { it.toIntOrNull() }.toMutableList()
                     Button(onClick = {
                         show = !show
-                        if(show) numberOfDice(intValues, n, result)
+                        if(show) result.value = numberOfDice(stringToMutableIntList(box), n.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -78,7 +76,7 @@ fun Day11(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) findCompositeNumbers(n, result)
+                        if(show) result.value = findCompositeNumbers(n.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -108,7 +106,7 @@ fun Day11(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) createMaximumValue1(stringToMutableIntList(numbers), result)
+                        if(show) result.value = createMaximumValue1(stringToMutableIntList(numbers))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -137,7 +135,7 @@ fun Day11(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) factorial(n, result)
+                        if(show) result.value = factorial(n.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -154,34 +152,37 @@ fun Day11(choose: String) {
     }
 }
 
-private fun numberOfDice(box: MutableList<Int>, n: String, result: MutableState<Int>) {
-    result.value = (box[0]/n.toInt()) * (box[1]/n.toInt()) * (box[2]/n.toInt())
-    println("주사위의 개수 : ${result.value}")
+private fun numberOfDice(box: MutableList<Int>, n: Int): Int {
+    println("주사위의 개수")
+    return (box[0]/n) * (box[1]/n) * (box[2]/n)
 }
 
-private fun findCompositeNumbers(n: String, result: MutableState<Int>) {
-    result.value = (1..n.toInt()).filter { i -> (1..i).filter { i % it == 0 }.size >= 3 }.size
-    println("합성수 찾기 : ${result.value}")
+private fun findCompositeNumbers(n: Int): Int {
+    println("합성수 찾기")
+    return (1..n).filter { i -> (1..i).filter { i % it == 0 }.size >= 3 }.size
 }
 
-private fun createMaximumValue1(numbers: MutableList<Int>, result: MutableState<Int>) {
+private fun createMaximumValue1(numbers: MutableList<Int>): Int {
+    println("최댓값 만들기(1)")
     val list = numbers.sorted()
     val a = list.last()
     val b = list[list.size-2]
-    result.value = a*b
-    println("최댓값 만들기(1) : ${result.value}")
+    return a*b
 }
 
 private fun factorialFunction(n: Int): Int {
     return if(n==0) 1 else n * factorialFunction(n-1)
 }
+// ↓ 사용
 
-private fun factorial(n: String, result: MutableState<Int>) {
+private fun factorial(n: Int): Int {
+    println("팩토리얼")
+    var answer = 0
     for(i in 10 downTo 1) {
-        if(factorialFunction(i) <= n.toInt()) {
-            result.value = i
+        if(factorialFunction(i) <= n) {
+            answer = i
             break
         }
     }
-    println("팩토리얼 : ${result.value}" )
+    return answer
 }

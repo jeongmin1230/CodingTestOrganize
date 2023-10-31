@@ -195,6 +195,7 @@ private fun findTheLocationOfAPoint(dot: MutableList<Int>): Int {
 }
 
 private fun makeItTwoDimensional(numList: IntArray, n: Int): Array<IntArray> {
+    println("2차원 으로 만들기")
     var count = 0
     val answer = Array(numList.size/n) { IntArray(n) }
     for(i in 0 until (numList.size / n)) {
@@ -203,7 +204,6 @@ private fun makeItTwoDimensional(numList: IntArray, n: Int): Array<IntArray> {
             count++
         }
     }
-    println("2차원 으로 만들기")
     return answer
 }
 

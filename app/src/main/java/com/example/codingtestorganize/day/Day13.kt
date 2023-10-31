@@ -36,7 +36,7 @@ fun Day13(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) controlZ(s, result)
+                        if(show) result.value = controlZ(s)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -67,7 +67,7 @@ fun Day13(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) lengthOfArrayElements(strList.split(",").map { it.trim() }.toMutableList(), result)
+                        if(show) result.addAll(lengthOfArrayElements(strList.split(",").map { it.trim() }.toMutableList()))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -97,7 +97,7 @@ fun Day13(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) removeDuplicateCharacters(myString, result)
+                        if(show) result.value = removeDuplicateCharacters(myString)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -128,7 +128,7 @@ fun Day13(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) conditionsForCompletingATriangle(stringToMutableIntList(sides), result)
+                        if(show) result.value = conditionsForCompletingATriangle(stringToMutableIntList(sides))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -145,33 +145,37 @@ fun Day13(choose: String) {
     }
 }
 
-private fun controlZ(s: String, result: MutableState<Int>) {
+private fun controlZ(s: String): Int {
+    println("컨트롤 제트")
+    var answer = 0
     val list = s.split(" ")
     for(i in list.indices) {
         if(list[i] == "Z") {
-            result.value -= list[i-1].toInt()
+            answer -= list[i-1].toInt()
         }
         else {
-            result.value += list[i].toInt()
+            answer += list[i].toInt()
         }
     }
-    println("컨트롤 제트 : ${result.value}")
+    return answer
 }
 
-private fun lengthOfArrayElements(myString: MutableList<String>, result: MutableList<Int>) {
+private fun lengthOfArrayElements(myString: MutableList<String>): List<Int> {
+    println("배열 원소의 길이")
+    val stringLength = mutableListOf<Int>()
     for(i in myString) {
-        result.add(i.length)
+        stringLength.add(i.length)
     }
-    println("배열 원소의 길이 : $result")
+    return stringLength
 }
 
-private fun removeDuplicateCharacters(myString: String, result: MutableState<String>) {
-    result.value = myString.split("").distinct().joinToString("")
-    println("중복된 문자 제거 : ${result.value}")
+private fun removeDuplicateCharacters(myString: String): String {
+    println("중복된 문자 제거")
+    return myString.split("").distinct().joinToString("")
 }
 
 
-private fun conditionsForCompletingATriangle(sides: MutableList<Int>, result: MutableState<Int>) {
-    sides.sorted().let { (x, y, z) ->  if(x + y > z) result.value = 1 else result.value = 2 }
-    println("삼각형의 완성 조건(1) : ${result.value}" )
+private fun conditionsForCompletingATriangle(sides: MutableList<Int>): Int {
+    println("삼각형의 완성 조건(1)")
+    sides.sorted().let { (x, y, z) ->  if(x + y > z) return 1 else return 2 }
 }
