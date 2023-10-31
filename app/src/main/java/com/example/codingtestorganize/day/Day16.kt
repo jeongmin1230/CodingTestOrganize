@@ -37,7 +37,7 @@ fun Day16(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) letter(message, result)
+                        if(show) result.value = letter(message)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -68,7 +68,7 @@ fun Day16(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) findTheLargestNumber(stringToMutableIntList(array), result)
+                        if(show) result.addAll(findTheLargestNumber(stringToMutableIntList(array)))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -98,7 +98,7 @@ fun Day16(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) computingStrings(myString, result)
+                        if(show) result.value = computingStrings(myString)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -135,7 +135,7 @@ fun Day16(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) similarityOfArrays(stringToMutableStringList(s1), stringToMutableStringList(s2), result)
+                        if(show) result.value = similarityOfArrays(stringToMutableStringList(s1), stringToMutableStringList(s2))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -153,20 +153,23 @@ fun Day16(choose: String) {
     }
 }
 
-private fun letter(message: String, result: MutableState<Int>) {
-    result.value = message.length * 2
-    println("편지 : ${result.value}")
+private fun letter(message: String): Int {
+    println("편지")
+    return  message.length * 2
 }
 
-private fun findTheLargestNumber(array: MutableList<Int>, result: MutableList<Int>) {
+private fun findTheLargestNumber(array: MutableList<Int>): List<Int> {
+    println("가장 큰 수 찾기")
+    val answer = mutableListOf<Int>()
     array.maxOrNull().let {
-        result.add(it ?: 0)
-        result.add(array.indexOf(it ?: 0))
+        answer.add(it ?: 0)
+        answer.add(array.indexOf(it ?: 0))
     }
-    println("가장 큰 수 찾기 : $result")
+    return answer
 }
 
-private fun computingStrings(myString: String, result: MutableState<Int>) {
+private fun computingStrings(myString: String): Int {
+    println("문자열 계산 하기")
     val stringArr = myString.split(" ".toRegex()).toTypedArray()
     var answer = stringArr[0].toInt()
     var i = 1
@@ -178,18 +181,17 @@ private fun computingStrings(myString: String, result: MutableState<Int>) {
         }
         i += 2
     }
-    result.value = answer
-    println("문자열 계산 하기 : ${result.value}")
+    return answer
 }
 
 
-private fun similarityOfArrays(s1: MutableList<String>, s2: MutableList<String>, result: MutableState<Int>) {
+private fun similarityOfArrays(s1: MutableList<String>, s2: MutableList<String>): Int {
+    println("배열의 유사도")
     var count = 0
     for(i in s1) {
         for(j in s2) {
             if(i == j) count++
         }
     }
-    result.value = count
-    println("배열의 유사도 : ${result.value}" )
+    return count
 }

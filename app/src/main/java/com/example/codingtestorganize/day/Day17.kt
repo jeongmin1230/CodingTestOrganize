@@ -45,7 +45,7 @@ fun Day17(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) findNumber(num, k, result)
+                        if(show) result.value = findNumber(num, k)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -85,7 +85,7 @@ fun Day17(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) chooseAMultipleOfN(n, stringToMutableIntList(numList), result)
+                        if(show) result.addAll(chooseAMultipleOfN(n.toInt(), stringToMutableIntList(numList)))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -116,7 +116,7 @@ fun Day17(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) addDigits(n, result)
+                        if(show) result.value = addDigits(n.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -145,7 +145,7 @@ fun Day17(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) oxQuiz(stringToMutableStringList(quiz), result)
+                        if(show) result.addAll(oxQuiz(stringToMutableStringList(quiz)))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -162,34 +162,40 @@ fun Day17(choose: String) {
     }
 }
 
-private fun findNumber(num: String, k: String, result: MutableState<Int>) {
-    if(num.contains(k)) result.value = num.indexOf(k)+1 else result.value = -1
-    println("숫자 찾기 : ${result.value}")
+private fun findNumber(num: String, k: String): Int {
+    println("숫자 찾기")
+    return if(num.contains(k)) num.indexOf(k)+1 else -1
 }
 
-private fun chooseAMultipleOfN(n: String, numList: MutableList<Int>, result: MutableList<Int>) {
+private fun chooseAMultipleOfN(n: Int, numList: MutableList<Int>): List<Int> {
+    println("n 의 배수 고르기")
+    val answer = mutableListOf<Int>()
     for(i in numList) {
-        if(i % n.toInt() == 0) {
-            result.add(i)
+        if(i % n == 0) {
+            answer.add(i)
         }
     }
-    println("n 의 배수 고르기 : $result")
+    return answer
 }
 
-private fun addDigits(n: String, result: MutableState<Int>) {
-    var input = n.toInt()
+private fun addDigits(n: Int):Int {
+    println("자릿수 더하기")
+    var input = n
+    var answer = 0
     while (input != 0) {
-        result.value += input % 10
+        answer += input % 10
         input /= 10
     }
-    println("자릿수 더하기 : ${result.value}")
+    return answer
 }
 
 
-private fun oxQuiz(quiz: MutableList<String>, result: MutableList<String>) {
+private fun oxQuiz(quiz: MutableList<String>): List<String> {
+    println("OX 퀴즈")
+    val answer = mutableListOf<String>()
     quiz.map { s: String ->
         val arr = s.trim().split(" ".toRegex())
-        if(arr[1] == "+" && arr[0].toInt() + arr[2].toInt() == arr[4].toInt() || arr[0].toInt() - arr[2].toInt() == arr[4].toInt()) result.add("O") else result.add("X")
+        if(arr[1] == "+" && arr[0].toInt() + arr[2].toInt() == arr[4].toInt() || arr[0].toInt() - arr[2].toInt() == arr[4].toInt()) answer.add("O") else answer.add("X")
     }.toTypedArray()
-    println("OX 퀴즈 : $result" )
+    return answer
 }

@@ -83,7 +83,7 @@ fun Day20(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) charactersCoordinates(stringToMutableStringList(keyInput), stringToMutableIntList(board), result)
+                        if(show) result.addAll(charactersCoordinates(stringToMutableStringList(keyInput), stringToMutableIntList(board)))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -114,7 +114,7 @@ fun Day20(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) createMaximumValue2(stringToMutableIntList(numbers), result)
+                        if(show) result.value = createMaximumValue2(stringToMutableIntList(numbers))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -143,7 +143,7 @@ fun Day20(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) addPolynomials(polynomial, result)
+                        if(show) result.value = addPolynomials(polynomial)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -175,15 +175,8 @@ private fun findTheAreaOfARectangle(dots: List<List<Int>>): Int {
     return answer
 }
 
-/*private fun parsePointInput(input: String): List<List<Int>> {
-    val pointStrings = input.split(" | ")
-    return pointStrings.map { pointString ->
-        val coordinates = pointString.split(",").map { it.toInt() }
-        coordinates
-    }
-}*/
-
-private fun charactersCoordinates(keyInput: MutableList<String>, board: MutableList<Int>, result: MutableList<Int>) {
+private fun charactersCoordinates(keyInput: MutableList<String>, board: MutableList<Int>): List<Int> {
+    println("캐릭터의 좌표")
     val answer = arrayOf(0, 0)
     for(i in keyInput) {
         when(i) {
@@ -213,11 +206,11 @@ private fun charactersCoordinates(keyInput: MutableList<String>, board: MutableL
         if(-(board[1]/2) > answer[1]) answer[1] = -(board[1]/2)
         if(board[1]/2 < answer[1]) answer[1] = board[1]/2
     }
-    result.addAll(answer)
-    println("캐릭터의 좌표 : $result")
+    return answer.toList()
 }
 
-private fun createMaximumValue2(numbers: MutableList<Int>, result: MutableState<Int>) {
+private fun createMaximumValue2(numbers: MutableList<Int>): Int {
+    println("최댓값 만들기(2)")
     var answer = 0
     val sortedNumbers = numbers.sorted()
     answer = if(sortedNumbers[0] * sortedNumbers[1] > sortedNumbers[sortedNumbers.size - 1] * sortedNumbers[sortedNumbers.size - 2]) {
@@ -225,12 +218,12 @@ private fun createMaximumValue2(numbers: MutableList<Int>, result: MutableState<
     } else {
         sortedNumbers[sortedNumbers.size - 1] * sortedNumbers[sortedNumbers.size - 2]
     }
-    result.value = answer
-    println("최댓값 만들기(2) : ${result.value}")
+    return answer
 }
 
 
-private fun addPolynomials(polynomial: String, result: MutableState<String>) {
+private fun addPolynomials(polynomial: String): String {
+    println("다항식 더하기")
     var x = 0
     var num = 0
     for(i in polynomial.split(" ".toRegex())) {
@@ -241,12 +234,11 @@ private fun addPolynomials(polynomial: String, result: MutableState<String>) {
             num += i.toInt()
         }
     }
-    result.value = if(num != 0 && x != 0) {
+    return if(num != 0 && x != 0) {
         "${x}x + $num"
     } else if(num == 0 && x != 0) {
         "${x}x"
     } else  {
         "null"
     }
-    println("다항식 더하기 : ${result.value}" )
 }

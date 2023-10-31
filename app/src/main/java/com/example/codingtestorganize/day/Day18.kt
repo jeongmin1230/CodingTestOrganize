@@ -44,7 +44,7 @@ fun Day18(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) stringWithinString(str1, str2, result)
+                        if(show) result.value = stringWithinString(str1, str2)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -76,7 +76,7 @@ fun Day18(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) identifyingSquareNumbers(n, result)
+                        if(show) result.value = identifyingSquareNumbers(n.toLong())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -114,7 +114,7 @@ fun Day18(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) bacterialGrowth(n, t, result)
+                        if(show) bacterialGrowth(n.toInt(), t.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -144,7 +144,7 @@ fun Day18(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) sortingStrings2(myString, result)
+                        if(show) result.value = sortingStrings2(myString)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -161,26 +161,27 @@ fun Day18(choose: String) {
     }
 }
 
-private fun stringWithinString(str1: String, str2: String, result: MutableState<Int>) {
-    result.value = if(str1.contains(str2)) 1 else 2
-    println("문자열 안에 문자열 : ${result.value}")
+private fun stringWithinString(str1: String, str2: String): Int {
+    println("문자열 안에 문자열 ")
+    return if(str1.contains(str2)) 1 else 2
 }
 
-private fun identifyingSquareNumbers(n: String, result: MutableState<Int>) {
+private fun identifyingSquareNumbers(n: Long): Int {
+    println("제곱 수 판별 하기")
     val sqrt = sqrt(n.toDouble()).toLong()
-    result.value = if(sqrt * sqrt == n.toLong()) 1 else 2
-    println("제곱 수 판별 하기 : ${result.value}")
+    return if(sqrt * sqrt == n) 1 else 2
 }
 
-private fun bacterialGrowth(n: String, t: String, result: MutableState<Int>) {
-    var answer = n.toInt()
-    repeat(t.toInt()) { answer *= 2}
-    result.value = answer
-    println("세균 증식 : ${result.value}")
+private fun bacterialGrowth(n: Int, t: Int): Int {
+    println("세균 증식")
+    var answer = n
+    repeat(t) { answer *= 2}
+    return answer
 }
 
 
-private fun sortingStrings2(myString: String, result: MutableState<String>) {
+private fun sortingStrings2(myString: String): String {
+    println("문자열 정렬 하기(2)")
     var string = ""
     for(i in myString) {
         if(i.isUpperCase()) {
@@ -189,6 +190,5 @@ private fun sortingStrings2(myString: String, result: MutableState<String>) {
             string += i
         }
     }
-    result.value = string.toCharArray().sorted().joinToString("")
-    println("문자열 정렬 하기(2) : ${result.value}" )
+    return string.toCharArray().sorted().joinToString("")
 }

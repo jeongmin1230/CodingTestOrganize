@@ -65,12 +65,16 @@ fun Day6(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) printingARightTriangle(n.toInt(), resultArray)
+                        if(show) resultArray.addAll(printingARightTriangle(n.toInt()))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
                     if(show) {
-                        Text("직각 삼각형 출력 하기 : 결과는 콘솔창 확인")
+                        val joinToStringArray = resultArray.joinToString("")
+                        Text("직각 삼각형 출력 하기 : \n")
+                        for(i in 0 until n.toInt()-1) {
+                            println(joinToStringArray)
+                        }
                     }
                     LaunchedEffect(show) {
                         if(!show) {
@@ -162,14 +166,18 @@ private fun flipString(myString: String): String {
 }
 
 /** TODO - 직각 삼각형 출력 하기 콘솔 에만 출력 되는 거 수정 */
-private fun printingARightTriangle(n: Int, resultArray: MutableList<String>) {
+private fun printingARightTriangle(n: Int): List<String> {
+    val printingTriangleList = mutableListOf<String>()
     println("직각 삼각형 출력 하기")
     for(i in 0 until n) {
         for(j in 0..i) {
+            printingTriangleList.add("*")
             print("*")
         }
+        printingTriangleList.add("\n")
         println()
     }
+    return printingTriangleList
 }
 
 private fun evenOddNumber(numList: MutableList<Int>): MutableList<Int> {

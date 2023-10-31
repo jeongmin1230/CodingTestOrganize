@@ -36,7 +36,7 @@ fun Day19(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) numberOf7(stringToMutableIntList(array), result)
+                        if(show) result.value = numberOf7(stringToMutableIntList(array))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -75,7 +75,7 @@ fun Day19(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) cutAndSaveAsArray(myString, n, result)
+                        if(show) result.addAll(cutAndSaveAsArray(myString, n.toInt()))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -114,7 +114,7 @@ fun Day19(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) numberOfDuplicateNumbers(stringToMutableIntList(array), n, result)
+                        if(show) result.value = numberOfDuplicateNumbers(stringToMutableIntList(array), n.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -152,7 +152,7 @@ fun Day19(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) aPersonTallerThanAShyPerson(stringToMutableIntList(array), height, result)
+                        if(show) result.value = aPersonTallerThanAShyPerson(stringToMutableIntList(array), height.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -170,23 +170,25 @@ fun Day19(choose: String) {
     }
 }
 
-private fun numberOf7(array: MutableList<Int>, result: MutableState<Int>) {
-    result.value = array.joinToString(""){ it.toString() }.split("".toRegex()).count{ it == "7" }
-    println("7의 개수 : ${result.value}")
+private fun numberOf7(array: MutableList<Int>): Int {
+    println("7의 개수")
+    return array.joinToString(""){ it.toString() }.split("".toRegex()).count{ it == "7" }
 }
 
-private fun cutAndSaveAsArray(myStr: String, n: String, result: MutableList<String>) {
-    result.addAll(myStr.chunked(n.toInt()).toTypedArray())
-    println("잘라서 배열로 저장 하기 : $result")
+private fun cutAndSaveAsArray(myStr: String, n: Int): List<String> {
+    println("잘라서 배열로 저장 하기")
+    val answer = mutableListOf<String>()
+    answer.addAll(myStr.chunked(n).toTypedArray())
+    return answer
 }
 
-private fun numberOfDuplicateNumbers(array: MutableList<Int>, n: String, result: MutableState<Int>) {
-    result.value = array.count{ it == n.toInt()}
-    println("중복된 숫자 개수 : ${result.value}")
+private fun numberOfDuplicateNumbers(array: MutableList<Int>, n: Int): Int {
+    println("중복된 숫자 개수")
+    return array.count{ it == n }
 }
 
 
-private fun aPersonTallerThanAShyPerson(array: MutableList<Int>, height: String, result: MutableState<Int>) {
-    result.value = array.count { height.toInt() < it }
-    println("머쓱이 보다 키 큰 사람 : ${result.value}" )
+private fun aPersonTallerThanAShyPerson(array: MutableList<Int>, height: Int): Int {
+    println("머쓱이 보다 키 큰 사람")
+    return array.count { height < it }
 }
