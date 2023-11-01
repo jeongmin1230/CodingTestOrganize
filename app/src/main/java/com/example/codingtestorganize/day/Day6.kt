@@ -49,7 +49,6 @@ fun Day6(choose: String) {
                 }
             }
             "2" -> {
-                val resultArray = remember { mutableListOf<String>() }
                 var n by remember { mutableStateOf("") }
                 var show by remember { mutableStateOf(false) }
                 Column {
@@ -63,23 +62,22 @@ fun Day6(choose: String) {
                         label = { Text(text = "정수 n 입력") },
                         modifier = Modifier.fillMaxWidth()
                     )
-                    Button(onClick = {
-                        show = !show
-                        if(show) resultArray.addAll(printingARightTriangle(n.toInt()))
-                    }) {
+                    Button(onClick = { show = !show }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
                     if(show) {
-                        val joinToStringArray = resultArray.joinToString("")
                         Text("직각 삼각형 출력 하기 : \n")
-                        for(i in 0 until n.toInt()-1) {
-                            println(joinToStringArray)
+                        for(i in 0 until n.toInt()) {
+                            Row {
+                                for(j in 0..i) {
+                                    Text("*")
+                                }
+                            }
                         }
                     }
                     LaunchedEffect(show) {
                         if(!show) {
                             n = ""
-                            resultArray.clear()
                         }
                     }
                 }
@@ -167,14 +165,14 @@ private fun flipString(myString: String): String {
 
 /** TODO - 직각 삼각형 출력 하기 콘솔 에만 출력 되는 거 수정 */
 private fun printingARightTriangle(n: Int): List<String> {
-    val printingTriangleList = mutableListOf<String>()
     println("직각 삼각형 출력 하기")
+    val printingTriangleList = mutableListOf<String>()
     for(i in 0 until n) {
         for(j in 0..i) {
             printingTriangleList.add("*")
             print("*")
         }
-        printingTriangleList.add("\n")
+        printingTriangleList.add(" ")
         println()
     }
     return printingTriangleList

@@ -19,7 +19,7 @@ fun Day15(choose: String) {
         .fillMaxSize()) {
         when(choose) {
             "1" -> {
-                val result = remember { mutableStateOf(0) }
+                val result = remember { mutableStateOf("") }
                 var numbers by remember { mutableStateOf("") }
                 var show by remember { mutableStateOf(false) }
                 Column {
@@ -45,7 +45,7 @@ fun Day15(choose: String) {
                     LaunchedEffect(show) {
                         if(!show) {
                             numbers = ""
-                            result.value = 0
+                            result.value = ""
                         }
                     }
                 }
@@ -160,10 +160,8 @@ fun Day15(choose: String) {
     }
 }
 
-/* TODO - 영어가 싫어요 */
-private fun hateEnglish(numbers: String): Int {
+private fun hateEnglish(numbers: String): String {
     println("영어가 싫어요")
-    println("뭐라 햇냐 $numbers")
     var answer = numbers
     val map = mapOf(
         "zero" to "0",
@@ -178,9 +176,9 @@ private fun hateEnglish(numbers: String): Int {
         "nine" to "9"
     )
     map.forEach {
-        answer += answer.replace(it.key, it.value)
+        answer = answer.replace(it.key, it.value)
     }
-    return answer.toInt()
+    return answer
 }
 
 private fun changeIndex(myString: String, num1: Int, num2: Int): String {
