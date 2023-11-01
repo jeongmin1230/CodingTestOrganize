@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.dp
 import com.example.codingtestorganize.R
 import com.example.codingtestorganize.convertListOfListsToArray
@@ -41,7 +42,7 @@ fun Day22(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) curseNumber3(n, result)
+                        if(show) result.value = curseNumber3(n.toInt())
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -170,8 +171,9 @@ fun Day22(choose: String) {
     }
 }
 
-private fun curseNumber3(n: String, result: MutableState<Int>) {
-    var answer = n.toInt()
+private fun curseNumber3(n: Int): Int {
+    println("저주의 숫자 3")
+    var answer = n
     var i = 1
     while(i <= answer) {
         if((i % 3 == 0) || i.toString().contains("3")) {
@@ -179,8 +181,7 @@ private fun curseNumber3(n: String, result: MutableState<Int>) {
         }
         i++
     }
-    result.value = answer
-    println("저주의 숫자 3 : ${result.value}")
+    return answer
 }
 
 private fun parallel(dots: Array<IntArray>): Int {

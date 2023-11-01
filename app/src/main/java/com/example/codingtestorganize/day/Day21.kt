@@ -35,7 +35,7 @@ fun Day21(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) additionOfHiddenNumbers2(myString, result)
+                        if(show) result.value = additionOfHiddenNumbers2(myString)
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -106,11 +106,11 @@ fun Day21(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) conditionsForCompletionOfATriangle(stringToMutableIntList(sides), result)
+                        if(show) result.value = conditionsForCompletionOfATriangle(stringToMutableIntList(sides))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
-                    if(show) Text("삼각형의 완성조건(2) : ${result.value}")
+                    if(show) Text("삼각형의 완성 조건(2) : ${result.value}")
                     LaunchedEffect(show) {
                         if(!show) {
                             sides = ""
@@ -144,7 +144,7 @@ fun Day21(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) alienLanguageDictionary(stringToMutableStringList(spell), stringToMutableStringList(dic), result)
+                        if(show) result.value = alienLanguageDictionary(stringToMutableStringList(spell), stringToMutableStringList(dic))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -162,14 +162,16 @@ fun Day21(choose: String) {
     }
 }
 
-private fun additionOfHiddenNumbers2(myString: String, result: MutableState<Int>) {
+private fun additionOfHiddenNumbers2(myString: String): Int {
+    println("숨어 있는 숫자의 덧셈(2)")
+    var answer = 0
     val split = myString.split("[a-zA-z]+".toRegex()).toTypedArray()
     for(i in split.indices) {
-        if(split[i].matches("[0-9]+".toRegex())) {
-            result.value += split[i].toInt()
+        if(split[i].matches("\\d+".toRegex())) {
+            answer += split[i].toInt()
         }
     }
-    println("숨어 있는 숫자의 덧셈(2) : ${result.value}")
+    return answer
 }
 
 fun safeZone(board: List<List<Int>>): Int {
@@ -204,16 +206,19 @@ private fun boomPoint(boomBoard: Array<IntArray>, row: Int, col: Int) {
     }
 }
 
-private fun conditionsForCompletionOfATriangle(sides: MutableList<Int>, result: MutableState<Int>) {
+// ↓ 아래 함수 에서 사용
+
+private fun conditionsForCompletionOfATriangle(sides: MutableList<Int>): Int {
+    println("삼각형의 완성 조건(2)")
     val sortedSides = sides.sortedDescending()
     val highLimit = sortedSides[0] + sortedSides[1]
     val lowLimit = sortedSides[0] - sortedSides[1]
-    result.value = highLimit - lowLimit - 1
-    println("삼각형의 완성 조건(2) : ${result.value}")
+    return highLimit - lowLimit - 1
 }
 
 
-private fun alienLanguageDictionary(spell: MutableList<String>, dic: MutableList<String>, result: MutableState<Int>) {
+private fun alienLanguageDictionary(spell: MutableList<String>, dic: MutableList<String>): Int {
+    println("외계어 사전")
     var answer = 2
     for(i in dic) {
         var right = true
@@ -228,6 +233,5 @@ private fun alienLanguageDictionary(spell: MutableList<String>, dic: MutableList
             break
         }
     }
-    result.value = answer
-    println("외계어 사전 : ${result.value}" )
+    return answer
 }

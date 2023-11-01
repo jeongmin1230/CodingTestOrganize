@@ -48,7 +48,7 @@ fun Day23(choose: String) {
                     )
                     Button(onClick = {
                         show = !show
-                        if(show) unusualArrangement(stringToMutableIntList(numList), n.toInt(), result)
+                        if(show) result.addAll(unusualArrangement(stringToMutableIntList(numList), n.toInt()))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -118,7 +118,7 @@ fun Day23(choose: String) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(onClick = {
                         show = !show
-                        if(show) babbling(stringToMutableStringList(babbling), result)
+                        if(show) result.value = babbling(stringToMutableStringList(babbling))
                     }) {
                         Text(text = if(!show) stringResource(id = R.string.enter) else stringResource(id = R.string.enter_again))
                     }
@@ -181,14 +181,14 @@ fun Day23(choose: String) {
     }
 }
 
-private fun unusualArrangement(numList: MutableList<Int>, n: Int, result: MutableList<Int>) {
-    result.addAll(numList.sortedWith { a, b ->
+private fun unusualArrangement(numList: MutableList<Int>, n: Int): List<Int> {
+    println("특이한 정렬")
+    return numList.sortedWith { a, b ->
         if(abs(a-n) == abs(b-n)) b.compareTo(a) else abs(a-n).compareTo(abs(b-n))
-    })
-    println("특이한 정렬 : $result")
+    }
 }
 
-fun ranking(score: Array<IntArray>): MutableList<Int> {
+fun ranking(score: Array<IntArray>): List<Int> {
     println("등수 매기기")
     val ranks = MutableList(score.size) { 1 }
 
@@ -199,13 +199,12 @@ fun ranking(score: Array<IntArray>): MutableList<Int> {
             }
         }
     }
-
     return ranks
 }
-private fun babbling(babblingList: MutableList<String>, result: MutableState<Int>) {
+private fun babbling(babblingList: MutableList<String>): Int {
+    println("옹알이(1)")
     val regex = "aya|ye|woo|ma".toRegex()
-    result.value = babblingList.map { it.replace(regex, "") }.count { it.isEmpty() }
-    println("옹알이(1) : ${result.value}")
+    return babblingList.map { it.replace(regex, "") }.count { it.isEmpty() }
 }
 
 fun loginSucceed(id_pw: Array<String>, db: Array<Array<String>>): String {
